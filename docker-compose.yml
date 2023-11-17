@@ -1,0 +1,12 @@
+﻿version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: tricount-postgres-db
+    environment:
+      POSTGRES_DB: tricount
+      POSTGRES_USER: tricount
+      POSTGRES_PASSWORD: tricount
+    ports:
+      - "5432:5432"
