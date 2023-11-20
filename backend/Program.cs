@@ -12,6 +12,7 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITricountRepository, TricountRepository>();
 
 var app = builder.Build();
 
