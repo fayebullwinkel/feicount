@@ -21,6 +21,21 @@ namespace tricount.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("TricountUser", b =>
+                {
+                    b.Property<int>("TricountsId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("TricountsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("TricountUser");
+                });
+
             modelBuilder.Entity("tricount.Models.Tricount", b =>
                 {
                     b.Property<int>("Id")
@@ -66,6 +81,21 @@ namespace tricount.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("TricountUser", b =>
+                {
+                    b.HasOne("tricount.Models.Tricount", null)
+                        .WithMany()
+                        .HasForeignKey("TricountsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("tricount.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

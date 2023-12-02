@@ -1,4 +1,5 @@
-﻿using tricount.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using tricount.Models;
 
 namespace tricount.Data;
 
@@ -20,12 +21,16 @@ public class UserRepository : IUserRepository
     
     public List<User> FindAll()
     {
-        return _ctx.Users.ToList();
+        return _ctx.Users
+            .Include(u => u.Tricounts)
+            .ToList();
     }
 
     public User? FindById(int id)
     {
-        return _ctx.Users.Find(id);
+        return _ctx.Users
+            .Include(u => u.Tricounts)
+            .FirstOrDefault(u => u.Id == id);
     }
 
     public User Create(User user)
@@ -34,4 +39,11 @@ public class UserRepository : IUserRepository
         _ctx.SaveChanges();
         return user;
     }
+
+    /*public void Delete(int id)
+    {
+        var user = FindById(id);
+        _ctx.Users.Remove(user);
+        _ctx.SaveChanges();
+    }*/
 }

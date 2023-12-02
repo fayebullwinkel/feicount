@@ -7,5 +7,5 @@ public class Tricount
     public string? Description { get; set; }
     public Currency? Currency { get; set; }
     public Category? Category { get; set; }
-    // public Users oder UserIds
+    public List<User> Users { get; } = new();
 }

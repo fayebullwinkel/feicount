@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using tricount.Controllers.Mappers;
 using tricount.Data;
 using tricount.Models;
 
@@ -9,22 +10,24 @@ namespace tricount.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
+    private readonly IUserMapper _userMapper;
 
-    public UserController(IUserRepository userRepository)
+    public UserController(IUserRepository userRepository, IUserMapper userMapper)
     {
         _userRepository = userRepository;
+        _userMapper = userMapper;
     }
     
     [HttpGet]
-    public List<User> GetAll()
+    public List<UserDto> GetAll()
     {
-        return _userRepository.FindAll();
+        return _userRepository.FindAll().Select(user => _userMapper.ToUserDto(user)).ToList();
     }
     
     [HttpGet("{id}")]
-    public User? GetById(int id)
+    public UserDto? GetById(int id)
     {
-        return _userRepository.FindById(id);
+        return _userMapper.ToUserDto(_userRepository.FindById(id));
     }
     
     [HttpPost]

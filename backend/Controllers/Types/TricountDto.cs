@@ -7,4 +7,5 @@ public class TricountDto
     public string? Description { get; set; }
     public Currency? Currency { get; set; }
     public Category? Category { get; set; }
+    public List<int> UserIds { get; set; }
 }

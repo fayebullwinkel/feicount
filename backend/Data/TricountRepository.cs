@@ -23,14 +23,15 @@ public class TricountRepository : ITricountRepository
     public List<Tricount> FindAll()
     {
         return _ctx.Tricounts
-            //.Include(t => t.Users)
+            .Include(t => t.Users)
             .ToList();
     }
 
     public Tricount? FindById(int id)
     {
         return _ctx.Tricounts
-            .Find(id);
+            .Include(t => t.Users)
+            .FirstOrDefault(t => t.Id == id);
     }
 
     public Tricount Create(Tricount tricount)
