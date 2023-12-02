@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using tricount.Controllers.Mappers;
 using tricount.Data;
+using tricount.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ builder.Services.AddScoped<ITricountRepository, TricountRepository>();
 
 builder.Services.AddScoped<ITricountMapper, TricountMapper>();
 builder.Services.AddScoped<IUserMapper, UserMapper>();
+
+builder.Services.AddScoped<ITricountService, TricountService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

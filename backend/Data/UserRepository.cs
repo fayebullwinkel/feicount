@@ -8,6 +8,7 @@ public interface IUserRepository
     public List<User> FindAll();
     public User? FindById(int id);
     public User Create(User user);
+    public void Delete(int id);
 }
 
 public class UserRepository : IUserRepository
@@ -40,10 +41,10 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    /*public void Delete(int id)
+    public void Delete(int id)
     {
         var user = FindById(id);
         _ctx.Users.Remove(user);
         _ctx.SaveChanges();
-    }*/
+    }
 }

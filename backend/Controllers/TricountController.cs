@@ -2,6 +2,7 @@
 using tricount.Controllers.Mappers;
 using tricount.Data;
 using tricount.Models;
+using tricount.Services;
 
 namespace tricount.Controllers;
 
@@ -9,39 +10,37 @@ namespace tricount.Controllers;
 [Route("api/[controller]")]
 public class TricountController: ControllerBase
 {
-    private readonly ITricountRepository _tricountRepository;
     private readonly ITricountMapper _tricountMapper;
+    private readonly ITricountService _tricountService;
 
-    public TricountController(ITricountRepository tricountRepository, ITricountMapper tricountMapper)
+    public TricountController(ITricountMapper tricountMapper, ITricountService tricountService)
     {
-        _tricountRepository = tricountRepository;
         _tricountMapper = tricountMapper;
+        _tricountService = tricountService;
     }
 
     [HttpGet]
     public List<TricountDto> GetAll()
     {
-        return _tricountRepository.FindAll().Select(tricount => _tricountMapper.ToTricountDto(tricount)).ToList();
+        return _tricountService.FindAll().Select(tricount => _tricountMapper.ToTricountDto(tricount)).ToList();
     }
 
     [HttpGet("{id}")]
     public TricountDto? GetById(int id)
     {
-        return _tricountMapper.ToTricountDto(_tricountRepository.FindById(id));
+        return _tricountMapper.ToTricountDto(_tricountService.FindById(id));
     }
 
     [HttpPost]
-    public TricountDto Post([FromBody] TricountDto dto)
+    public void Post([FromBody] TricountDto dto)
     {
-        var users = new List<User>(); // TODO extract to service, call repo
-        _tricountRepository.Create(_tricountMapper.ToTricount(dto));
-        return dto;
+        var tricount = _tricountMapper.ToTricount(dto);
+        _tricountService.CreateTricount(dto.UserIds, tricount);
     }
     
     [HttpDelete("{id}")]
     public void Delete(int id)
     {
-        _tricountRepository.Delete(id);
-        //Response.Redirect("./");
+        _tricountService.Delete(id);
     }
 }

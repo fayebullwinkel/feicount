@@ -2,6 +2,7 @@
 using tricount.Controllers.Mappers;
 using tricount.Data;
 using tricount.Models;
+using tricount.Services;
 
 namespace tricount.Controllers;
 
@@ -9,30 +10,37 @@ namespace tricount.Controllers;
 [Route("/api/[controller]")]
 public class UserController : ControllerBase
 {
-    private readonly IUserRepository _userRepository;
+    private readonly IUserService _userService;
     private readonly IUserMapper _userMapper;
 
-    public UserController(IUserRepository userRepository, IUserMapper userMapper)
+    public UserController(IUserService userService, IUserMapper userMapper)
     {
-        _userRepository = userRepository;
+        _userService = userService;
         _userMapper = userMapper;
     }
     
     [HttpGet]
     public List<UserDto> GetAll()
     {
-        return _userRepository.FindAll().Select(user => _userMapper.ToUserDto(user)).ToList();
+        return _userService.FindAll().Select(user => _userMapper.ToUserDto(user)).ToList();
     }
     
     [HttpGet("{id}")]
     public UserDto? GetById(int id)
     {
-        return _userMapper.ToUserDto(_userRepository.FindById(id));
+        return _userMapper.ToUserDto(_userService.FindById(id));
     }
     
     [HttpPost]
-    public User Post(User user)
+    public void Post([FromBody] UserDto dto)
     {
-        return _userRepository.Create(user);
+        var user = _userMapper.ToUser(dto);
+        _userService.CreateUser(dto.TricountIds, user);
+    }
+
+    [HttpDelete("{id}")]
+    public void Delete(int id)
+    {
+        _userService.Delete(id);
     }
 }
