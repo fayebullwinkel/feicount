@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITricountRepository, TricountRepository>();
+builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
 builder.Services.AddScoped<ITricountMapper, TricountMapper>();
 builder.Services.AddScoped<IUserMapper, UserMapper>();

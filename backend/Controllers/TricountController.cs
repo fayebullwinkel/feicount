@@ -31,6 +31,12 @@ public class TricountController: ControllerBase
         return _tricountMapper.ToTricountDto(_tricountService.FindById(id));
     }
 
+    [HttpGet("{id}/expenses")]
+    public List<ExpenseDto> GetExpenses(int id)
+    {
+        return _tricountService.GetTricountExpenses(id).Select(expense => _tricountMapper.ToExpenseDto(expense)).ToList();
+    }
+
     [HttpPost]
     public void Post([FromBody] TricountDto dto)
     {

@@ -8,4 +8,5 @@ public class Tricount
     public Currency? Currency { get; set; }
     public Category? Category { get; set; }
     public List<User> Users { get; set; } = new();
+    public List<Expense> Expenses { get; set; } = new();
 }

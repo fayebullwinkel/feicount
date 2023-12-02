@@ -9,15 +9,18 @@ public interface ITricountService
     public List<Tricount> FindAll();
     public Tricount FindById(int id);
     public void Delete(int id);
+    public List<Expense> GetTricountExpenses(int id);
 }
 
 public class TricountService: ITricountService
 {
+    private readonly IExpenseRepository _expenseRepository;
     private readonly ITricountRepository _tricountRepository;
     private readonly IUserRepository _userRepository;
     
-    public TricountService(IUserRepository userRepository, ITricountRepository tricountRepository)
+    public TricountService(IExpenseRepository expenseRepository, ITricountRepository tricountRepository, IUserRepository userRepository)
     {
+        _expenseRepository = expenseRepository;
         _tricountRepository = tricountRepository;
         _userRepository = userRepository;
     }
@@ -30,6 +33,11 @@ public class TricountService: ITricountService
             tricount.Users = users;
         }
         _tricountRepository.Create(tricount);
+    }
+
+    public List<Expense> GetTricountExpenses(int id)
+    {
+        return _expenseRepository.FindForTricount(id);
     }
 
     public List<Tricount> FindAll()
