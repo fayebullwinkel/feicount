@@ -24,6 +24,7 @@ public class UserRepository : IUserRepository
     {
         return _ctx.Users
             .Include(u => u.Tricounts)
+            .Include(u => u.Expenses)
             .ToList();
     }
 
@@ -31,6 +32,7 @@ public class UserRepository : IUserRepository
     {
         return _ctx.Users
             .Include(u => u.Tricounts)
+            .Include(u => u.Expenses)
             .FirstOrDefault(u => u.Id == id);
     }
 

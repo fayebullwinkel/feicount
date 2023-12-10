@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using tricount.Controllers.Mappers;
-using tricount.Data;
+using tricount.Controllers.Types;
 using tricount.Models;
 using tricount.Services;
 
@@ -34,8 +34,7 @@ public class UserController : ControllerBase
     [HttpPost]
     public void Post([FromBody] UserDto dto)
     {
-        var user = _userMapper.ToUser(dto);
-        _userService.CreateUser(dto.TricountIds, user);
+        _userService.CreateUser(dto);
     }
 
     [HttpDelete("{id}")]

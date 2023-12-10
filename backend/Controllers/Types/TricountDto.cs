@@ -8,4 +8,5 @@ public class TricountDto
     public Currency? Currency { get; set; }
     public Category? Category { get; set; }
     public List<int> UserIds { get; set; }
+    public List<int> ExpenseIds { get; set; }
 }

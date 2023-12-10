@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using tricount.Controllers.Mappers;
-using tricount.Data;
+using tricount.Controllers.Types;
 using tricount.Models;
 using tricount.Services;
 
@@ -40,8 +40,13 @@ public class TricountController: ControllerBase
     [HttpPost]
     public void Post([FromBody] TricountDto dto)
     {
-        var tricount = _tricountMapper.ToTricount(dto);
-        _tricountService.CreateTricount(dto.UserIds, tricount);
+        _tricountService.CreateTricount(dto);
+    }
+
+    [HttpPost("{id}/expenses")]
+    public void AddExpense(int id, [FromBody] ExpenseDto dto)
+    {
+        _tricountService.AddExpenseToTricount(id, dto);
     }
     
     [HttpDelete("{id}")]
