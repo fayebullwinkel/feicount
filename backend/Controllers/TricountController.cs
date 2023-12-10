@@ -54,4 +54,10 @@ public class TricountController: ControllerBase
     {
         _tricountService.Delete(id);
     }
+
+    [HttpDelete("{id}/expenses/{expenseId}")]
+    public void DeleteExpense(int expenseId)
+    {
+        _tricountService.DeleteExpense(expenseId);
+    }
 }

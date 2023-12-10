@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using tricount.Controllers.Mappers;
 using tricount.Controllers.Types;
 using tricount.Data;
@@ -13,6 +14,7 @@ public interface ITricountService
     public void Delete(int id);
     public List<Expense> GetTricountExpenses(int id);
     public void AddExpenseToTricount(int tricountId, ExpenseDto dto);
+    public void DeleteExpense(int expenseId);
 }
 
 public class TricountService: ITricountService
@@ -96,5 +98,8 @@ public class TricountService: ITricountService
         _tricountRepository.AddExpenseToTricount(tricount, expense);
     }
     
-    // TODO: implement delete expense
+    public void DeleteExpense(int expenseId)
+    {
+        _expenseRepository.Delete(expenseId);
+    }
 }

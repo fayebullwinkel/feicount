@@ -8,6 +8,7 @@ public interface IExpenseRepository
     public List<Expense> FindAll();
     public Expense? FindById(int id);
     public List<Expense> FindForTricount(int tricountId);
+    public void Delete(int expenseId);
 }
 
 public class ExpenseRepository : IExpenseRepository
@@ -44,5 +45,12 @@ public class ExpenseRepository : IExpenseRepository
             .Include(e => e.Spender)
             .Include(e => e.Recipients)
             .Where(e => e.Tricount.Id == tricountId).ToList();
+    }
+    
+    public void Delete(int id)
+    {
+        var expense = FindById(id);
+        _ctx.Expenses.Remove(expense ?? throw new InvalidOperationException());
+        _ctx.SaveChanges();
     }
 }
