@@ -17,28 +17,30 @@ public interface ITricountService
     public void DeleteExpense(int expenseId);
     public void AddTricountUsers(int tricountId, List<int> userIds);
     public void DeleteTricountUser(int tricountId, int userId);
+    public void DistributeRemainingUserExpenses(Tricount tricount, User user);
 }
 
-public class TricountService: ITricountService
+public class TricountService : ITricountService
 {
     private readonly IExpenseRepository _expenseRepository;
     private readonly ITricountRepository _tricountRepository;
     private readonly IUserRepository _userRepository;
     private readonly ITricountMapper _tricountMapper;
-    
-    public TricountService(IExpenseRepository expenseRepository, ITricountRepository tricountRepository, IUserRepository userRepository, ITricountMapper tricountMapper)
+
+    public TricountService(IExpenseRepository expenseRepository, ITricountRepository tricountRepository,
+        IUserRepository userRepository, ITricountMapper tricountMapper)
     {
         _expenseRepository = expenseRepository;
         _tricountRepository = tricountRepository;
         _userRepository = userRepository;
         _tricountMapper = tricountMapper;
     }
-    
+
     public void CreateTricount(TricountDto dto)
     {
         var users = dto.UserIds.Select(userId => _userRepository.FindById(userId)).ToList();
         var expenses = dto.ExpenseIds.Select(expenseId => _expenseRepository.FindById(expenseId)).ToList();
-        
+
         if (users.Any(u => u == null))
         {
             throw new ArgumentNullException($"one or more {users} not found.");
@@ -48,7 +50,7 @@ public class TricountService: ITricountService
         {
             throw new ArgumentNullException($"One or more {expenses} not found.");
         }
-        
+
         var tricount = _tricountMapper.ToTricount(dto, users!, expenses!);
         tricount.Users = users!;
         tricount.Expenses = expenses!;
@@ -80,12 +82,12 @@ public class TricountService: ITricountService
         var tricount = _tricountRepository.FindById(tricountId);
         var spender = _userRepository.FindById(dto.SpenderUserId);
         var recipients = dto.RecipientIds.Select(recipientId => _userRepository.FindById(recipientId)).ToList();
-        
+
         if (tricount == null)
         {
             throw new ArgumentNullException($"{tricount} not found.");
         }
-        
+
         if (spender == null)
         {
             throw new ArgumentNullException($"{spender} not found.");
@@ -95,11 +97,11 @@ public class TricountService: ITricountService
         {
             throw new ArgumentNullException($"One or more {recipients} not found.");
         }
-        
+
         var expense = _tricountMapper.ToExpense(dto, spender!, recipients!, tricount);
         _tricountRepository.AddExpenseToTricount(tricount, expense);
     }
-    
+
     public void DeleteExpense(int expenseId)
     {
         _expenseRepository.Delete(expenseId);
@@ -109,11 +111,12 @@ public class TricountService: ITricountService
     {
         var tricount = FindById(tricountId);
         var users = userIds.Select(userId => _userRepository.FindById(userId)).ToList();
-        
+
         if (tricount == null)
         {
             throw new ArgumentNullException($"{tricount} not found.");
         }
+
         if (users.Any(r => r == null))
         {
             throw new ArgumentNullException($"One or more {users} not found.");
@@ -126,16 +129,33 @@ public class TricountService: ITricountService
     {
         var tricount = FindById(tricountId);
         var user = _userRepository.FindById(userId);
+
         if (tricount == null)
         {
             throw new ArgumentNullException($"{tricount} not found.");
         }
-        
+
         if (user == null)
         {
             throw new ArgumentNullException($"{user} not found.");
         }
 
+        if (user.Expenses.Count != 0)
+        {
+            DistributeRemainingUserExpenses(tricount, user);
+        }
+
         _tricountRepository.DeleteTricountUser(tricount, user!);
+    }
+
+    public void DistributeRemainingUserExpenses(Tricount tricount, User userToDelete)
+    {
+        var users = tricount.Users.Where(user => user.Id != userToDelete.Id);
+
+        foreach (var expense in userToDelete.Expenses)
+        {
+            expense.Recipients.Remove(userToDelete);
+            expense.Recipients.AddRange(users);
+        }
     }
 }
