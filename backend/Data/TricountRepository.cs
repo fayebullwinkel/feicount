@@ -10,6 +10,8 @@ public interface ITricountRepository
     public Tricount Create(Tricount tricount);
     public void Delete(int id);
     public void AddExpenseToTricount(Tricount tricount, Expense expense);
+    public void AddTricountUsers(Tricount tricount, List<User> users);
+    public void DeleteTricountUser(Tricount tricount, User user);
 }
 
 public class TricountRepository : ITricountRepository
@@ -54,6 +56,18 @@ public class TricountRepository : ITricountRepository
     public void AddExpenseToTricount(Tricount tricount, Expense expense)
     {
         tricount.Expenses.Add(expense);
+        _ctx.SaveChanges();
+    }
+
+    public void AddTricountUsers(Tricount tricount, List<User> users)
+    {
+        tricount.Users.AddRange(users);
+        _ctx.SaveChanges();
+    }
+
+    public void DeleteTricountUser(Tricount tricount, User user)
+    {
+        tricount.Users.Remove(user);
         _ctx.SaveChanges();
     }
 }

@@ -64,8 +64,7 @@ public class TricountMapper: ITricountMapper
             Amount = model.Amount,
             Date = model.Date,
             SpenderUserId = model.Spender.Id,
-            RecipientIds = model.Recipients.Select(r => r.Id).ToList(),
-            TricountId = model.Tricount.Id
+            RecipientIds = model.Recipients.Select(r => r.Id).ToList()
         };
     }
 }

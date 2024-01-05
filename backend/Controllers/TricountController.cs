@@ -36,6 +36,12 @@ public class TricountController: ControllerBase
     {
         return _tricountService.GetTricountExpenses(id).Select(expense => _tricountMapper.ToExpenseDto(expense)).ToList();
     }
+    
+    [HttpPut("{id}/users")]
+    public void AddTricountUsers(int id, [FromBody] List<int> userIds)
+    {
+        _tricountService.AddTricountUsers(id, userIds);
+    }
 
     [HttpPost]
     public void Post([FromBody] TricountDto dto)
@@ -59,5 +65,11 @@ public class TricountController: ControllerBase
     public void DeleteExpense(int expenseId)
     {
         _tricountService.DeleteExpense(expenseId);
+    }
+
+    [HttpDelete("{id}/users/{userId}")]
+    public void DeleteTricountUser(int id, int userId)
+    {
+        _tricountService.DeleteTricountUser(id, userId);
     }
 }
