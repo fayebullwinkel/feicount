@@ -37,10 +37,10 @@ public class TricountController: ControllerBase
         return _tricountService.GetTricountExpenses(id).Select(expense => _tricountMapper.ToExpenseDto(expense)).ToList();
     }
     
-    [HttpPut("{id}/users")]
-    public void AddTricountUsers(int id, [FromBody] List<int> userIds)
+    [HttpPost("{id}/users/{userId}")]
+    public void AddUser(int id, int userId)
     {
-        _tricountService.AddTricountUsers(id, userIds);
+        _tricountService.AddUserToTricount(id, userId);
     }
 
     [HttpPost]

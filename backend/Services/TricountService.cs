@@ -15,9 +15,8 @@ public interface ITricountService
     public List<Expense> GetTricountExpenses(int id);
     public void AddExpenseToTricount(int tricountId, ExpenseDto dto);
     public void DeleteExpense(int expenseId);
-    public void AddTricountUsers(int tricountId, List<int> userIds);
     public void DeleteTricountUser(int tricountId, int userId);
-    public void DistributeRemainingUserExpenses(Tricount tricount, User user);
+    public void AddUserToTricount(int tricountId, int userId);
 }
 
 public class TricountService : ITricountService
@@ -107,22 +106,17 @@ public class TricountService : ITricountService
         _expenseRepository.Delete(expenseId);
     }
 
-    public void AddTricountUsers(int tricountId, List<int> userIds)
+    public void AddUserToTricount(int tricountId, int userId)
     {
-        var tricount = FindById(tricountId);
-        var users = userIds.Select(userId => _userRepository.FindById(userId)).ToList();
+        var tricount = _tricountRepository.FindById(tricountId);
+        var user = _userRepository.FindById(userId);
 
         if (tricount == null)
         {
             throw new ArgumentNullException($"{tricount} not found.");
         }
 
-        if (users.Any(r => r == null))
-        {
-            throw new ArgumentNullException($"One or more {users} not found.");
-        }
-
-        _tricountRepository.AddTricountUsers(tricount, users!);
+        _tricountRepository.AddUserToTricount(tricount, user);
     }
 
     public void DeleteTricountUser(int tricountId, int userId)
