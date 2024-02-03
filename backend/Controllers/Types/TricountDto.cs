@@ -1,4 +1,6 @@
-﻿namespace tricount.Models;
+﻿using tricount.Controllers.Types;
+
+namespace tricount.Models;
 
 public class TricountDto
 {
@@ -7,6 +9,7 @@ public class TricountDto
     public string? Description { get; set; }
     public Currency? Currency { get; set; }
     public Category? Category { get; set; }
-    public List<int> UserIds { get; set; }
+    public List<int>? UserIds { get; set; }
+    public List<NameDto> UserNames { get; set; }
     public List<int> ExpenseIds { get; set; }
 }

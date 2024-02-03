@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using tricount.Controllers.Types;
 using tricount.Models;
 
 namespace tricount.Data;
@@ -9,6 +10,7 @@ public interface IUserRepository
     public User? FindById(int id);
     public User Create(User user);
     public void Delete(int id);
+    public User FindByNameOrCreate(NameDto userName);
 }
 
 public class UserRepository : IUserRepository
@@ -48,5 +50,24 @@ public class UserRepository : IUserRepository
         var user = FindById(id);
         _ctx.Users.Remove(user);
         _ctx.SaveChanges();
+    }
+
+    public User FindByNameOrCreate(NameDto userName)
+    {
+        var user = _ctx.Users.FirstOrDefault(u => u.FirstName == userName.FirstName && u.LastName == userName.LastName);
+
+        if (user != null) return user;
+        user = new User()
+        {
+            FirstName = userName.FirstName,
+            LastName = userName.LastName
+        };
+
+        _ctx.Users.Add(user);
+        _ctx.SaveChanges();
+
+        // TODO: maybe make lastname optional?
+
+        return user;
     }
 }

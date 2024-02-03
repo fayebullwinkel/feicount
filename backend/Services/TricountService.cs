@@ -37,22 +37,15 @@ public class TricountService : ITricountService
 
     public void CreateTricount(TricountDto dto)
     {
-        var users = dto.UserIds.Select(userId => _userRepository.FindById(userId)).ToList();
+        var users = dto.UserNames.Select(userName => _userRepository.FindByNameOrCreate(userName)).ToList();
         var expenses = dto.ExpenseIds.Select(expenseId => _expenseRepository.FindById(expenseId)).ToList();
-
-        if (users.Any(u => u == null))
-        {
-            throw new ArgumentNullException($"one or more {users} not found.");
-        }
 
         if (expenses.Any(e => e == null))
         {
             throw new ArgumentNullException($"One or more {expenses} not found.");
         }
 
-        var tricount = _tricountMapper.ToTricount(dto, users!, expenses!);
-        tricount.Users = users!;
-        tricount.Expenses = expenses!;
+        var tricount = _tricountMapper.ToTricount(dto, users, expenses!);
         _tricountRepository.Create(tricount);
     }
 
