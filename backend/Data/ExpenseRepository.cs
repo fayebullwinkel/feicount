@@ -9,6 +9,7 @@ public interface IExpenseRepository
     public Expense? FindById(int id);
     public List<Expense> FindForTricount(int tricountId);
     public void Delete(int expenseId);
+    public void Create(Expense expense);
 }
 
 public class ExpenseRepository : IExpenseRepository
@@ -46,11 +47,17 @@ public class ExpenseRepository : IExpenseRepository
             .Include(e => e.Recipients)
             .Where(e => e.Tricount.Id == tricountId).ToList();
     }
+
+    public void Create(Expense expense)
+    {
+        _ctx.Expenses.Add(expense);
+        _ctx.SaveChanges();
+    }
     
     public void Delete(int id)
     {
         var expense = FindById(id);
-        _ctx.Expenses.Remove(expense ?? throw new InvalidOperationException());
+        _ctx.Expenses.Remove(expense ?? throw new ArgumentNullException($"Expense {id} not found."));
         _ctx.SaveChanges();
     }
 }

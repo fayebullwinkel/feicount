@@ -25,8 +25,14 @@ public class TricountController: ControllerBase
         return _tricountService.FindAll().Select(tricount => _tricountMapper.ToTricountDto(tricount)).ToList();
     }
 
+    [HttpGet("{id}/transactions")]
+    public List<Transaction> GetTricountTransactions(int id)
+    {
+        return _tricountService.GetTricountTransactions(id);
+    }
+
     [HttpGet("{id}")]
-    public TricountDto? GetById(int id)
+    public TricountDto GetById(int id)
     {
         return _tricountMapper.ToTricountDto(_tricountService.FindById(id));
     }

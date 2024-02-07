@@ -17,6 +17,7 @@ public interface ITricountService
     public void DeleteExpense(int expenseId);
     public void DeleteTricountUser(int tricountId, int userId);
     public void AddUserToTricount(int tricountId, int userId);
+    public List<Transaction> GetTricountTransactions(int id);
 }
 
 public class TricountService : ITricountService
@@ -90,7 +91,8 @@ public class TricountService : ITricountService
             throw new ArgumentNullException($"One or more {recipients} not found.");
         }
 
-        var expense = _tricountMapper.ToExpense(dto, spender!, recipients!, tricount);
+        var expense = _tricountMapper.ToExpense(dto, spender, recipients!, tricount);
+        _expenseRepository.Create(expense);
         _tricountRepository.AddExpenseToTricount(tricount, expense);
     }
 
@@ -144,5 +146,11 @@ public class TricountService : ITricountService
             expense.Recipients.Remove(userToDelete);
             expense.Recipients.AddRange(users);
         }
+    }
+
+    public List<Transaction> GetTricountTransactions(int id)
+    {
+        var tricount = _tricountRepository.FindById(id);
+        return tricount.CalculateTransactions();
     }
 }

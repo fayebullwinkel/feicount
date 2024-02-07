@@ -12,6 +12,7 @@ public interface ITricountRepository
     public void AddExpenseToTricount(Tricount tricount, Expense expense);
     public void AddUserToTricount(Tricount tricount, User user);
     public void DeleteTricountUser(Tricount tricount, User user);
+    public Tricount? GetTricountForExpense(int expenseId);
 }
 
 public class TricountRepository : ITricountRepository
@@ -36,6 +37,7 @@ public class TricountRepository : ITricountRepository
         return _ctx.Tricounts
             .Include(t => t.Users)
             .Include(t => t.Expenses)
+                .ThenInclude(e => e.Recipients)
             .FirstOrDefault(t => t.Id == id);
     }
 
@@ -69,5 +71,10 @@ public class TricountRepository : ITricountRepository
     {
         tricount.Users.Remove(user);
         _ctx.SaveChanges();
+    }
+
+    public Tricount? GetTricountForExpense(int expenseId)
+    {
+        return _ctx.Tricounts.FirstOrDefault(t => t.Id == expenseId);
     }
 }
