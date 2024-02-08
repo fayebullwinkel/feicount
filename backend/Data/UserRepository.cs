@@ -66,8 +66,6 @@ public class UserRepository : IUserRepository
         _ctx.Users.Add(user);
         _ctx.SaveChanges();
 
-        // TODO: maybe make lastname optional?
-
         return user;
     }
 }

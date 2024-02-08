@@ -16,3 +16,10 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+.center { 
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  height: 100%
+}
