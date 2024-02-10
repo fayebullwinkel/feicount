@@ -27,11 +27,15 @@ function CustomTabPanel(props: TabPanelProps) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    {children.map((child, idx) => (
-                        <div key={idx} style={{ display: idx === 0 ? 'block' : 'none' }}>
-                            {child}
-                        </div>
-                    ))}
+                    {Array.isArray(children) ? (
+                        children.map((child, idx) => (
+                            <div key={idx} style={{ display: idx === 0 ? 'block' : 'none' }}>
+                                {child}
+                            </div>
+                        ))
+                    ) : (
+                        <div style={{ display: 'block' }}>{children}</div>
+                    )}
                 </Box>
             )}
         </div>
