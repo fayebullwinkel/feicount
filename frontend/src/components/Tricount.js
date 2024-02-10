@@ -5,6 +5,8 @@ import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import {Cost, Transfer} from "./Icons";
 import {Fab} from "@mui/material";
+import {useEffect, useState} from "react";
+import ExpenseOverview from "../ExpenseOverview";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -25,7 +27,11 @@ function CustomTabPanel(props: TabPanelProps) {
         >
             {value === index && (
                 <Box sx={{ p: 3 }}>
-                    {children}
+                    {children.map((child, idx) => (
+                        <div key={idx} style={{ display: idx === 0 ? 'block' : 'none' }}>
+                            {child}
+                        </div>
+                    ))}
                 </Box>
             )}
         </div>
@@ -39,21 +45,48 @@ function a11yProps(index: number) {
     };
 }
 
-export default function Tricount() {
-    const [value, setValue] = React.useState(0);
+export default function Tricount({id}) {
+    const [value, setValue] = useState(0);
+    const [expenses, setExpenses] = useState([]);
+    const [spender, setSpender] = useState(null);
+
+    useEffect(() => {
+        const fetchTriountOverviewData = async () => {
+            try {
+                const expenseResponse = await fetch(`/api/Tricount/${id}/expenses`);
+                if (!expenseResponse.ok) {
+                    throw new Error('Failed to fetch expenses');
+                }
+                const expenseData = await expenseResponse.json();
+                setExpenses(expenseData);
+
+                const spenderId = expenseData[0].spenderUserId;
+                const spenderResponse = await fetch(`api/User/${spenderId}`);
+                if (!spenderResponse.ok) {
+                    throw new Error(`Failed to fetch User ${spenderId}`);
+                }
+                const spenderData = await spenderResponse.json();
+                setSpender(spenderData);
+            } catch (error) {
+                console.error('Error fetching expenses:', error);
+            }
+        };
+
+        fetchTriountOverviewData();
+    }, []);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
-    
+
     function addTricount() {
         console.log("Button clicked");
     }
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs 
+        <Box sx={{width: '100%'}}>
+            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                <Tabs
                     value={value}
                     onChange={handleChange}
                     textColor="secondary"
@@ -61,21 +94,25 @@ export default function Tricount() {
                     aria-label="tabs"
                     centered
                 >
-                    <Tab icon=<Cost /> label="AUSGABEN" {...a11yProps(0)} />
-                    <Tab icon=<Transfer /> label="SALDEN" {...a11yProps(1)} />
+                    <Tab icon=<Cost/> label="AUSGABEN" {...a11yProps(0)} />
+                    <Tab icon=<Transfer/> label="SALDEN" {...a11yProps(1)} />
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0} className="center">
-                <div>
-                    <Fab color="primary" aria-label="add" onClick={addTricount}>
-                        <AddIcon />
-                    </Fab>
-                </div>
+                {expenses.map((expense) => (
+                    <div key={expense.id}>
+                        {spender !== null && (
+                            <ExpenseOverview expense={expense} spender={spender} />
+                        )}
+                    </div>
+                ))}
+                <Fab color="primary" aria-label="add" onClick={addTricount}>
+                    <AddIcon />
+                </Fab>
             </CustomTabPanel>
+
             <CustomTabPanel value={value} index={1} className="center">
-                <div>
-                    Item Two
-                </div>
+                Hier Daten zur großen Abrechnung einfügen
             </CustomTabPanel>
         </Box>
     );

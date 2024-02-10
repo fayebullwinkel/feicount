@@ -1,5 +1,5 @@
 import { Counter } from "./components/Counter";
-import { Home } from "./components/Home";
+import Home from "./components/Home";
 
 const AppRoutes = [
   {

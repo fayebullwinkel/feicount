@@ -1,14 +1,33 @@
-import React, { Component } from 'react';
-import Tricount from "./Tricount";
+import React, { useEffect, useState } from 'react';
+import Tricount from './Tricount';
 
-export class Home extends Component {
-  static displayName = Home.name;
+export default function Home() {
+    const [tricounts, setTricounts] = useState([]);
 
-  render() {
+    useEffect(() => {
+        const fetchTriountOverviewData = async () => {
+            try {
+                const response = await fetch('/api/Tricount');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch tricounts');
+                }
+                const tricountData = await response.json();
+                setTricounts(tricountData);
+            } catch (error) {
+                console.error('Error fetching expenses:', error);
+            }
+        };
+
+        fetchTriountOverviewData();
+    }, []);
+
     return (
-      <div>
-        <Tricount />
-      </div>
+        <>
+            {tricounts.map((tricount) => (
+                <div key={tricount.id}>
+                    <Tricount id={tricount.id} />
+                </div>
+            ))}
+        </>
     );
-  }
-}
+};
