@@ -6,13 +6,28 @@ import Box from '@mui/material/Box';
 import { Cost, Transfer } from "./Icons";
 import { Fab } from "@mui/material";
 import { useEffect, useState } from "react";
-import ExpenseOverview from "../ExpenseOverview";
+import ExpenseOverview from "./ExpenseOverview";
 
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
     value: number;
     className?: string;
+}
+
+interface Expense {
+    id: number;
+    spenderUserId: number;
+    recipientIds: number;
+    amount: number;
+    date: string;
+    title: string;
+}
+
+interface Spender {
+    id: number;
+    firstName: string;
+    lastName: string;
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -56,8 +71,8 @@ interface TricountProps {
 
 const Tricount: React.FC<TricountProps> = ({ id }) => {
     const [value, setValue] = useState(0);
-    const [expenses, setExpenses] = useState<any[]>([]);
-    const [spender, setSpender] = useState<any | null>(null);
+    const [expenses, setExpenses] = useState<Expense[]>([]);
+    const [spender, setSpender] = useState<Spender[]>([]);
 
     useEffect(() => {
         const fetchTriountOverviewData = async () => {
@@ -69,13 +84,12 @@ const Tricount: React.FC<TricountProps> = ({ id }) => {
                 const expenseData = await expenseResponse.json();
                 setExpenses(expenseData);
 
-                const spenderId = expenseData[0].spenderUserId;
-                const spenderResponse = await fetch(`api/User/${spenderId}`);
+                const spenderResponse = await fetch(`api/User/`);
                 if (!spenderResponse.ok) {
-                    throw new Error(`Failed to fetch User ${spenderId}`);
+                    throw new Error(`Failed to fetch users`);
                 }
                 const spenderData = await spenderResponse.json();
-                setSpender(spenderData);
+                setSpender(spenderData || []); // Set as an empty array if spenderData is null or undefined
             } catch (error) {
                 console.error('Error fetching expenses:', error);
             }
@@ -108,13 +122,17 @@ const Tricount: React.FC<TricountProps> = ({ id }) => {
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0} className="center">
-                {expenses.map((expense) => (
-                    <div key={expense.id}>
-                        {spender !== null && (
-                            <ExpenseOverview expense={expense} spender={spender} />
-                        )}
-                    </div>
-                ))}
+                {expenses.map((expense) => {
+                    const currentSpender = spender.find((sp: Spender) => sp.id === expense.spenderUserId);
+
+                    return (
+                        <div key={expense.id}>
+                            {currentSpender && (
+                                <ExpenseOverview expense={expense} spender={currentSpender} />
+                            )}
+                        </div>
+                    );
+                })}
                 <Fab color="primary" aria-label="add" onClick={addTricount}>
                     <AddIcon />
                 </Fab>
