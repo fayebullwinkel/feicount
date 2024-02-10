@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import Tricount from './Tricount';
+interface TricountData {
+    id: number;
+    // Add other properties if needed
+}
 
 export default function Home() {
-    const [tricounts, setTricounts] = useState([]);
+    const [tricounts, setTricounts] = useState<TricountData[]>([]);
 
     useEffect(() => {
         const fetchTriountOverviewData = async () => {
@@ -11,7 +15,8 @@ export default function Home() {
                 if (!response.ok) {
                     throw new Error('Failed to fetch tricounts');
                 }
-                const tricountData = await response.json();
+                
+                const tricountData: TricountData[] = await response.json();
                 setTricounts(tricountData);
             } catch (error) {
                 console.error('Error fetching expenses:', error);
@@ -25,9 +30,9 @@ export default function Home() {
         <>
             {tricounts.map((tricount) => (
                 <div key={tricount.id}>
-                    <Tricount id={tricount.id} />
+                    <Tricount id={tricount.id.toString()} />
                 </div>
             ))}
         </>
     );
-};
+}

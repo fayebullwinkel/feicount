@@ -1,7 +1,8 @@
-// icon:cost-estimate | Teeny Icons https://teenyicons.com/ | Anja van Staden
-import * as React from "react";
+import React, { SVGProps } from "react";
 
-export default function Cost(props) {
+interface CostProps extends SVGProps<SVGSVGElement> {}
+
+export default function Cost(props: CostProps) {
     return (
         <svg fill="none" viewBox="0 0 15 15" height="1em" width="1em" {...props}>
             <path

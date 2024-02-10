@@ -3,15 +3,16 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
-import {Cost, Transfer} from "./Icons";
-import {Fab} from "@mui/material";
-import {useEffect, useState} from "react";
+import { Cost, Transfer } from "./Icons";
+import { Fab } from "@mui/material";
+import { useEffect, useState } from "react";
 import ExpenseOverview from "../ExpenseOverview";
 
 interface TabPanelProps {
     children?: React.ReactNode;
     index: number;
     value: number;
+    className?: string;
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -49,10 +50,14 @@ function a11yProps(index: number) {
     };
 }
 
-export default function Tricount({id}) {
+interface TricountProps {
+    id: string;
+}
+
+const Tricount: React.FC<TricountProps> = ({ id }) => {
     const [value, setValue] = useState(0);
-    const [expenses, setExpenses] = useState([]);
-    const [spender, setSpender] = useState(null);
+    const [expenses, setExpenses] = useState<any[]>([]);
+    const [spender, setSpender] = useState<any | null>(null);
 
     useEffect(() => {
         const fetchTriountOverviewData = async () => {
@@ -77,7 +82,7 @@ export default function Tricount({id}) {
         };
 
         fetchTriountOverviewData();
-    }, []);
+    }, [id]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
@@ -88,8 +93,8 @@ export default function Tricount({id}) {
     }
 
     return (
-        <Box sx={{width: '100%'}}>
-            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+        <Box sx={{ width: '100%' }}>
+            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -98,8 +103,8 @@ export default function Tricount({id}) {
                     aria-label="tabs"
                     centered
                 >
-                    <Tab icon=<Cost/> label="AUSGABEN" {...a11yProps(0)} />
-                    <Tab icon=<Transfer/> label="SALDEN" {...a11yProps(1)} />
+                    <Tab icon={<Cost />} label="AUSGABEN" {...a11yProps(0)} />
+                    <Tab icon={<Transfer />} label="SALDEN" {...a11yProps(1)} />
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0} className="center">
@@ -120,4 +125,6 @@ export default function Tricount({id}) {
             </CustomTabPanel>
         </Box>
     );
-}
+};
+
+export default Tricount;

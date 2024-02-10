@@ -1,7 +1,8 @@
-// icon:bx-transfer | Boxicons https://boxicons.com/ | Atisa
-import * as React from "react";
+import React, { SVGProps } from "react";
 
-export default function Transfer(props) {
+interface TransferProps extends SVGProps<SVGSVGElement> {}
+
+export default function Transfer(props: TransferProps) {
     return (
         <svg
             viewBox="0 0 24 24"
