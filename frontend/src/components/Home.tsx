@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import Tricount from './Tricount';
+import TricountOverview from './TricountOverview';
+import AddIcon from "@mui/icons-material/Add";
+import {Fab} from "@mui/material";
 interface TricountData {
     id: number;
-    // Add other properties if needed
+    title: string;
+    description?: string;
 }
 
 export default function Home() {
@@ -26,13 +29,22 @@ export default function Home() {
         fetchTriountOverviewData();
     }, []);
 
+    function addTricount() {
+        console.log("You should implement this...");
+    }
+
     return (
         <>
             {tricounts.map((tricount) => (
                 <div key={tricount.id}>
-                    <Tricount id={tricount.id.toString()} />
+                    <TricountOverview id={tricount.id.toString()} title={tricount.title} description={tricount.description ? tricount.description : ''} />
                 </div>
             ))}
+            <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                <Fab color="primary" aria-label="add" onClick={addTricount}>
+                    <AddIcon />
+                </Fab>
+            </div>
         </>
     );
 }
