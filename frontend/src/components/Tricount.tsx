@@ -89,7 +89,7 @@ const Tricount: React.FC<TricountProps> = ({ id }) => {
                     throw new Error(`Failed to fetch users`);
                 }
                 const spenderData = await spenderResponse.json();
-                setSpender(spenderData || []); // Set as an empty array if spenderData is null or undefined
+                setSpender(spenderData || []);
             } catch (error) {
                 console.error('Error fetching expenses:', error);
             }
@@ -102,8 +102,8 @@ const Tricount: React.FC<TricountProps> = ({ id }) => {
         setValue(newValue);
     };
 
-    function addTricount() {
-        console.log("Button clicked");
+    function addExpense() {
+        console.log("You should implement this...");
     }
 
     return (
@@ -122,20 +122,24 @@ const Tricount: React.FC<TricountProps> = ({ id }) => {
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0} className="center">
-                {expenses.map((expense) => {
-                    const currentSpender = spender.find((sp: Spender) => sp.id === expense.spenderUserId);
+                <div>
+                    {expenses.map((expense) => {
+                        const currentSpender = spender.find((sp: Spender) => sp.id === expense.spenderUserId);
 
-                    return (
-                        <div key={expense.id}>
-                            {currentSpender && (
-                                <ExpenseOverview expense={expense} spender={currentSpender} />
-                            )}
-                        </div>
-                    );
-                })}
-                <Fab color="primary" aria-label="add" onClick={addTricount}>
-                    <AddIcon />
-                </Fab>
+                        return (
+                            <div key={expense.id}>
+                                {currentSpender && (
+                                    <ExpenseOverview expense={expense} spender={currentSpender} />
+                                )}
+                            </div>
+                        );
+                    })}
+                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                        <Fab color="primary" aria-label="add" onClick={addExpense}>
+                            <AddIcon />
+                        </Fab>
+                    </div>
+                </div>
             </CustomTabPanel>
 
             <CustomTabPanel value={value} index={1} className="center">
