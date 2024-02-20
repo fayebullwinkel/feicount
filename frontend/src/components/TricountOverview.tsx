@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Grid} from "@mui/material";
 import Button from '@mui/material/Button';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import {useNavigate} from 'react-router-dom';
+import {NavigateFunction, useNavigate} from 'react-router-dom';
 
 interface TricountOverviewProps {
     id: string;
@@ -11,7 +11,7 @@ interface TricountOverviewProps {
 }
 
 const TricountOverview: React.FC<TricountOverviewProps> = ({id, title, description}) => {
-    const navigate = useNavigate();
+    const navigate: NavigateFunction = useNavigate();
 
     const goToTricount = () => {
         navigate(`/tricount/${id}`);

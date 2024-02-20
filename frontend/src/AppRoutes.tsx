@@ -3,6 +3,7 @@ import { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import { Counter } from './components/Counter';
 import Home from './components/Home';
+import NewTricount from './components/NewTricount';
 import Tricount from './components/Tricount';
 
 interface AppRoute {
@@ -28,6 +29,10 @@ const AppRoutes: AppRoute[] = [
   {
     path: '/tricount/:id',
     element: <TricountWrapper />
+  },
+  {
+    path: '/tricount/new',
+    element: <NewTricount />
   }
 ];
 export default AppRoutes;

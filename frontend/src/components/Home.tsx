@@ -40,47 +40,7 @@ export default function Home() {
     };
     
     const addTricount = async () => {
-        // TODO: redirect to NewTricount
         navigate('/tricount/new');
-        // TODO: fetch data from form submit 
-        // TODO: use post logic to add tricount
-        /*try {
-            const postData: TricountData = {
-                // TODO: implement user input
-                "id": 0,
-                "title": "Mein zweiter Tricount",
-                "description": "Dies ist ein zweiter Test",
-                "currency": 0,
-                "category": 0,
-                "userIds": [],
-                "userNames": [
-                    {
-                        "firstName": "Jannis",
-                        "lastName": "Harling"
-                    },
-                    {
-                        "firstName": "Heidelies",
-                        "lastName": "Bullwinkel"
-                    }
-                ],
-                "expenseIds": []
-
-            }
-            const postResponse = await fetch('/api/Tricount', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(postData),
-            });
-
-            if (!postResponse.ok) {
-                throw new Error('Failed to post data');
-            }
-            fetchTricounts();
-        } catch (err: any) {
-            console.log(err.message)
-        }*/
     }
 
     return (

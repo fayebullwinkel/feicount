@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import {TextField, Button, MenuItem} from "@mui/material";
 import { Currency } from "../types/Currency";
 import { Category } from "../types/Category";
+import { TricountData } from "./Home";
+import {useNavigate} from "react-router-dom";
 
 export default function NewTricount() {
     const [title, setTitle] = useState("");
@@ -10,7 +12,7 @@ export default function NewTricount() {
     const [category, setCategory] = useState(Category[Category.Reise]);
     const [titleError, setTitleError] = useState(false);
     const [descriptionError, setDescriptionError] = useState(false);
-
+    const navigate = useNavigate();
     const handleSelectChange = (
         event: React.ChangeEvent<{ value: unknown }>,
         setState: React.Dispatch<React.SetStateAction<string>>,
@@ -18,8 +20,12 @@ export default function NewTricount() {
         const selectedKey = event.target.value as string;
         setState(selectedKey);
     };
+
+    const mapToEnum = (value: string, enumType: any) => {
+        return enumType[value];
+    };
     
-    const handleSubmit = (event: any) => { // TODO check type any
+    const handleSubmit = async (event: any) => { // TODO check type any
         event.preventDefault()
 
         setTitleError(false)
@@ -32,17 +38,72 @@ export default function NewTricount() {
             setDescriptionError(true)
         }
 
-        /*const postData: TricountData = {
+        const postData: TricountData = {
             id: 0,
             title,
             description,
-            currency,
-            category,
+            currency: mapToEnum(currency, Currency),
+            category: mapToEnum(category, Category),
             userIds: [],
             userNames: [],
             expenseIds: []
-        };*/
+        };
 
+        try {
+            const postResponse = await fetch('/api/Tricount', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData),
+            });
+
+            if (!postResponse.ok) {
+                throw new Error('Failed to post data');
+            }
+
+            navigate('/');
+        } catch (err: any) {
+            console.log(err.message)
+        }
+
+        /*try {
+            const postData: TricountData = {
+                // TODO: implement user input
+                "id": 0,
+                "title": "Mein zweiter Tricount",
+                "description": "Dies ist ein zweiter Test",
+                "currency": 0,
+                "category": 0,
+                "userIds": [],
+                "userNames": [
+                    {
+                        "firstName": "Jannis",
+                        "lastName": "Harling"
+                    },
+                    {
+                        "firstName": "Heidelies",
+                        "lastName": "Bullwinkel"
+                    }
+                ],
+                "expenseIds": []
+
+            }
+            const postResponse = await fetch('/api/Tricount', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(postData),
+            });
+
+            if (!postResponse.ok) {
+                throw new Error('Failed to post data');
+            }
+            fetchTricounts();
+        } catch (err: any) {
+            console.log(err.message)
+        }*/
     }
 
     // TODO: abbrechen und sichern button?
