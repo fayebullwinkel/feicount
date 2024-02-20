@@ -25,7 +25,7 @@ export default function NewTricount() {
         return enumType[value];
     };
     
-    const handleSubmit = async (event: any) => { // TODO check type any
+    const handleSubmit = async (event: any) => {
         event.preventDefault()
 
         setTitleError(false)
@@ -66,47 +66,13 @@ export default function NewTricount() {
         } catch (err: any) {
             console.log(err.message)
         }
-
-        /*try {
-            const postData: TricountData = {
-                // TODO: implement user input
-                "id": 0,
-                "title": "Mein zweiter Tricount",
-                "description": "Dies ist ein zweiter Test",
-                "currency": 0,
-                "category": 0,
-                "userIds": [],
-                "userNames": [
-                    {
-                        "firstName": "Jannis",
-                        "lastName": "Harling"
-                    },
-                    {
-                        "firstName": "Heidelies",
-                        "lastName": "Bullwinkel"
-                    }
-                ],
-                "expenseIds": []
-
-            }
-            const postResponse = await fetch('/api/Tricount', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(postData),
-            });
-
-            if (!postResponse.ok) {
-                throw new Error('Failed to post data');
-            }
-            fetchTricounts();
-        } catch (err: any) {
-            console.log(err.message)
-        }*/
     }
 
-    // TODO: abbrechen und sichern button?
+    const goToHome = async () => {
+        navigate('/');
+    }
+
+    // TODO: abbrechen button
     return (
         <React.Fragment>
             <form autoComplete="off" onSubmit={handleSubmit}>
@@ -175,8 +141,14 @@ export default function NewTricount() {
                             </MenuItem>
                         ))}
                 </TextField>
-                <Button variant="outlined" color="secondary" type="submit">Sichern</Button>
-
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Button variant="outlined" color="error" onClick={goToHome}>
+                        Abbrechen
+                    </Button>
+                    <Button variant="outlined" color="secondary" type="submit">
+                        Sichern
+                    </Button>
+                </div>
             </form>
         </React.Fragment>
     );
