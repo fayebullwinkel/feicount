@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import TricountOverview from './TricountOverview';
 import AddIcon from "@mui/icons-material/Add";
 import {Fab} from "@mui/material";
-import {NavigateFunction, useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Currency } from '../types/Currency';
 import { Category } from '../types/Category';
 

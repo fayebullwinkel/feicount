@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using tricount.Data;
@@ -11,9 +12,11 @@ using tricount.Data;
 namespace tricount.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240207114006_AddedRecipientsToExpenses")]
+    partial class AddedRecipientsToExpenses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -93,10 +96,10 @@ namespace tricount.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Category")
+                    b.Property<int?>("Category")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Currency")
+                    b.Property<int?>("Currency")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
@@ -124,6 +127,7 @@ namespace tricount.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LastName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
