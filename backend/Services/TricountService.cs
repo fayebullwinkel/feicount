@@ -13,6 +13,7 @@ public interface ITricountService
     public Tricount FindById(int id);
     public void Delete(int id);
     public List<Expense> GetTricountExpenses(int id);
+    public List<User> GetTricountUsers(int id);
     public void AddExpenseToTricount(int tricountId, ExpenseDto dto);
     public void DeleteExpense(int expenseId);
     public void DeleteTricountUser(int tricountId, int userId);
@@ -53,6 +54,11 @@ public class TricountService : ITricountService
     public List<Expense> GetTricountExpenses(int id)
     {
         return _expenseRepository.FindForTricount(id);
+    }
+    
+    public List<User> GetTricountUsers(int id)
+    {
+        return _tricountRepository.GetUsers(id);
     }
 
     public List<Tricount> FindAll()

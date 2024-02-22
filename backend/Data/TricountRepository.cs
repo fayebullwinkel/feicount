@@ -11,6 +11,7 @@ public interface ITricountRepository
     public void Delete(int id);
     public void AddExpenseToTricount(Tricount tricount, Expense expense);
     public void AddUserToTricount(Tricount tricount, User user);
+    public List<User> GetUsers(int id);
     public void DeleteTricountUser(Tricount tricount, User user);
     public Tricount? GetTricountForExpense(int expenseId);
 }
@@ -65,6 +66,12 @@ public class TricountRepository : ITricountRepository
     {
         tricount.Users.Add(user);
         _ctx.SaveChanges();
+    }
+
+    public List<User> GetUsers(int id)
+    {
+        var tricount = FindById(id);
+        return tricount.Users;
     }
 
     public void DeleteTricountUser(Tricount tricount, User user)

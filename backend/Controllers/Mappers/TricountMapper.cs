@@ -8,7 +8,8 @@ public interface ITricountMapper
     public Tricount ToTricount(TricountDto dto, List<User> users, List<Expense> expenses);
     public TricountDto ToTricountDto(Tricount model);
     public Expense ToExpense(ExpenseDto dto, User spender, List<User> recipients, Tricount tricount);
-    public ExpenseDto ToExpenseDto(Expense modelList);
+    public ExpenseDto ToExpenseDto(Expense model);
+    public UserDto ToUserDto(User model);
 }
 
 public class TricountMapper: ITricountMapper
@@ -65,6 +66,18 @@ public class TricountMapper: ITricountMapper
             Date = model.Date,
             SpenderUserId = model.Spender.Id,
             RecipientIds = model.Recipients.Select(r => r.Id).ToList()
+        };
+    }
+
+    public UserDto ToUserDto(User model)
+    {
+        return new UserDto
+        {
+            Id = model.Id,
+            FirstName = model.FirstName,
+            LastName = model.LastName,
+            TricountIds = model.Tricounts.Select(t => t.Id).ToList(),
+            ExpenseIds = model.Expenses.Select(e => e.Id).ToList()
         };
     }
 }
