@@ -7,6 +7,7 @@ import { Cost, Transfer } from "./Icons";
 import { Fab } from "@mui/material";
 import { useEffect, useState } from "react";
 import ExpenseOverview from "./ExpenseOverview";
+import {useNavigate, useParams} from "react-router-dom";
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -73,11 +74,12 @@ const Tricount: React.FC<TricountProps> = ({ id }) => {
     const [value, setValue] = useState(0);
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [spender, setSpender] = useState<Spender[]>([]);
-
+    const navigate = useNavigate();
+    
     useEffect(() => {
         const fetchTriountOverviewData = async () => {
             try {
-                const expenseResponse = await fetch(`/api/Tricount/${id}/expenses`);
+                const expenseResponse = await fetch(`/api/Tricount/${id}/Expenses`);
                 if (!expenseResponse.ok) {
                     throw new Error('Failed to fetch expenses');
                 }
@@ -103,7 +105,7 @@ const Tricount: React.FC<TricountProps> = ({ id }) => {
     };
 
     function addExpense() {
-        console.log("You should implement this...");
+        navigate(`/tricount/${id}/expenses/new`);
     }
 
     return (

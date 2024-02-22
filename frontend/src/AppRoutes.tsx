@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Counter } from './components/Counter';
 import Home from './components/Home';
 import NewTricount from './components/NewTricount';
+import NewExpense from './components/NewExpense';
 import Tricount from './components/Tricount';
 
 interface AppRoute {
@@ -33,6 +34,10 @@ const AppRoutes: AppRoute[] = [
   {
     path: '/tricount/new',
     element: <NewTricount />
+  },
+  {
+    path: '/tricount/:id/expenses/new',
+    element: <NewExpense />
   }
 ];
 export default AppRoutes;
