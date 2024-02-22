@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {TextField, Button, MenuItem} from "@mui/material";
+import {TextField, Button, MenuItem, FormControlLabel, Checkbox} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
@@ -18,6 +18,7 @@ interface UserData {
     lastName: string,
     tricountIds?: number[];
     expenseIds?: number[];
+    checked?: boolean;
 }
 
 export default function NewExpense() {
@@ -55,14 +56,34 @@ export default function NewExpense() {
             }
 
             const usersData: UserData[] = await tricountUserResponse.json();
-            setUsers(usersData);
+            const updatedUsers = usersData.map(user => ({ ...user, checked: false }));
 
-            if (usersData.length > 0) {
-                setUser(usersData[0]);
+            setUsers(updatedUsers);
+
+            if (updatedUsers.length > 0) {
+                setUser(updatedUsers[0]);
             }
         } catch (error) {
             console.error('Error fetching users:', error);
         }
+    };
+
+
+    const handleChangeUser = (userId: number) => (event: { target: { checked: boolean; }; }) => {
+        const updatedUsers = users.map((user) =>
+            user.id === userId ? { ...user, checked: event.target.checked } : user
+        );
+        setUsers(updatedUsers);
+    };
+
+    const parentCheckboxProps = {
+        checked: users.every((user) => user.checked),
+        indeterminate: users.some((user) => user.checked) && users.some((user) => !user.checked),
+        onChange: () => {
+            const allChecked = users.every((user) => user.checked);
+            const updatedUsers = users.map((user) => ({ ...user, checked: !allChecked }));
+            setUsers(updatedUsers);
+        },
     };
     
     const handleSubmit = async (event: any) => {
@@ -175,6 +196,21 @@ export default function NewExpense() {
                         </MenuItem>
                     ))}
                 </TextField>
+                <div>
+                    <div style={{ backgroundColor: 'lightgrey', padding: '10px' }}>
+                        <FormControlLabel label="Für wen" control={<Checkbox {...parentCheckboxProps} />} />
+                    </div>
+                    <div style={{padding: '10px' }}>
+                        {users.map((user) => (
+                            <div key={user.id}>
+                                <FormControlLabel
+                                    label={`${user.firstName} ${user.lastName}`}
+                                    control={<Checkbox checked={user.checked} onChange={handleChangeUser(user.id)} />}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </form>
         </React.Fragment>
     );
