@@ -26,22 +26,16 @@ export default function NewExpense() {
     const [title, setTitle] = useState("");
     const [amount, setAmount] = useState(0);
     const [date, setDate] = useState(new Date());
-    const [spenderUserId, setSpenderUserId] = useState(1); // TODO: initial spender and recipients logic
-    const [recipientIds, setRecipientIds] = useState(2);
+    const [spenderUserId, setSpenderUserId] = useState(0);
+    const [recipientIds, setRecipientIds] = useState([0]);
     const [amountError, setAmountError] = useState(false);
     const [users, setUsers] = useState<UserData[]>([]);
-    const [user, setUser] = useState<UserData>({id: 0, firstName: "", lastName: ""});
     const navigate = useNavigate();
     const handleSelectChange = (
         event: React.ChangeEvent<{ value: unknown }>,
-        setUser: React.Dispatch<React.SetStateAction<UserData>>,
+        setSpenderUserId: React.Dispatch<React.SetStateAction<number>>,
     ) => {
-        const selectedUserId = event.target.value;
-        const selectedUser: UserData | undefined = users.find(user => user.id === selectedUserId);
-
-        if (selectedUser) {
-            setUser(selectedUser);
-        }
+        setSpenderUserId(event.target.value as number);
     };
 
     useEffect(() => {
@@ -56,24 +50,23 @@ export default function NewExpense() {
             }
 
             const usersData: UserData[] = await tricountUserResponse.json();
-            const updatedUsers = usersData.map(user => ({ ...user, checked: false }));
+            const updatedUsers = usersData.map(user => ({ ...user, checked: true }));
 
             setUsers(updatedUsers);
 
             if (updatedUsers.length > 0) {
-                setUser(updatedUsers[0]);
+                setSpenderUserId(updatedUsers[0].id);
+                setRecipientIds(updatedUsers.map(user => user.id));
             }
         } catch (error) {
             console.error('Error fetching users:', error);
         }
     };
-
-
+    
     const handleChangeUser = (userId: number) => (event: { target: { checked: boolean; }; }) => {
-        const updatedUsers = users.map((user) =>
+        setUsers(prevUsers => prevUsers.map((user) =>
             user.id === userId ? { ...user, checked: event.target.checked } : user
-        );
-        setUsers(updatedUsers);
+        ));
     };
 
     const parentCheckboxProps = {
@@ -90,18 +83,25 @@ export default function NewExpense() {
         event.preventDefault();
 
         setAmountError(false);
+        setRecipientIds([]);
 
-        if (title == '') {
+        if (amount == 0) {
             setAmountError(true);
         }
+
+        const recipientIds: number[] = users
+            .filter((user) => user.checked)
+            .map((user) => user.id);
+        
+        setRecipientIds(recipientIds);
 
         const postData: ExpenseData = {
             id: 0,
             title,
             amount,
             date,
-            spenderUserId: 1, // TODO: fill with values
-            recipientIds: [2]
+            spenderUserId: spenderUserId,
+            recipientIds
         };
 
         try {
@@ -180,7 +180,7 @@ export default function NewExpense() {
                 </TextField>
                 <TextField
                     label="Bezahlt von"
-                    onChange={(event) => handleSelectChange(event, setUser)}
+                    onChange={(event) => handleSelectChange(event, setSpenderUserId)}
                     required
                     variant="outlined"
                     color="secondary"
@@ -188,11 +188,11 @@ export default function NewExpense() {
                     select
                     fullWidth
                     sx={{mb: 3}}
-                    value={user.id || ''}
+                    value={spenderUserId || ''}
                 >
-                    {users.map((user: UserData) => (
-                        <MenuItem key={user.id} value={user.id}>
-                            {user.firstName} {user.lastName}
+                    {users.map((userData: UserData) => (
+                        <MenuItem key={userData.id} value={userData.id}>
+                            {userData.firstName} {userData.lastName}
                         </MenuItem>
                     ))}
                 </TextField>
