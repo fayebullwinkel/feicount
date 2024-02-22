@@ -25,7 +25,7 @@ public class TricountController: ControllerBase
         return _tricountService.FindAll().Select(tricount => _tricountMapper.ToTricountDto(tricount)).ToList();
     }
 
-    [HttpGet("{id}/transactions")]
+    [HttpGet("{id}/Transactions")]
     public List<Transaction> GetTricountTransactions(int id)
     {
         return _tricountService.GetTricountTransactions(id);
@@ -37,13 +37,13 @@ public class TricountController: ControllerBase
         return _tricountMapper.ToTricountDto(_tricountService.FindById(id));
     }
 
-    [HttpGet("{id}/expenses")]
+    [HttpGet("{id}/Expenses")]
     public List<ExpenseDto> GetExpenses(int id)
     {
         return _tricountService.GetTricountExpenses(id).Select(expense => _tricountMapper.ToExpenseDto(expense)).ToList();
     }
     
-    [HttpPost("{id}/users/{userId}")]
+    [HttpPost("{id}/Users/{userId}")]
     public void AddUser(int id, int userId)
     {
         _tricountService.AddUserToTricount(id, userId);
@@ -55,7 +55,7 @@ public class TricountController: ControllerBase
         _tricountService.CreateTricount(dto);
     }
 
-    [HttpPost("{id}/expenses")]
+    [HttpPost("{id}/Expenses")]
     public void AddExpense(int id, [FromBody] ExpenseDto dto)
     {
         _tricountService.AddExpenseToTricount(id, dto);
@@ -67,13 +67,13 @@ public class TricountController: ControllerBase
         _tricountService.Delete(id);
     }
 
-    [HttpDelete("{id}/expenses/{expenseId}")]
+    [HttpDelete("{id}/Expenses/{expenseId}")]
     public void DeleteExpense(int expenseId)
     {
         _tricountService.DeleteExpense(expenseId);
     }
 
-    [HttpDelete("{id}/users/{userId}")]
+    [HttpDelete("{id}/Users/{userId}")]
     public void DeleteTricountUser(int id, int userId)
     {
         _tricountService.DeleteTricountUser(id, userId);
