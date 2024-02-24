@@ -1,6 +1,6 @@
 import { Checkbox, FormControlLabel, TextField } from "@mui/material";
 import React from "react";
-import { UserData } from "./New";
+import { UserData } from "../../services/TricountService";
 
 interface RecipientsSelectorProps {
     users: UserData[];

@@ -2,12 +2,12 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TextField } from "@mui/material";
 import React from "react";
 
-interface DateComponentProps {
+interface DateSelectorProps {
     selectedDate: Date;
     setDate: React.Dispatch<React.SetStateAction<Date>>;
 }
 
-export default function DateSelector({ selectedDate, setDate }: DateComponentProps) {
+export default function DateSelector({ selectedDate, setDate }: DateSelectorProps) {
     return (
         <TextField
             label="Datum"

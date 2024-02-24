@@ -1,31 +1,18 @@
 import React, {useEffect, useState} from "react";
-import {TextField, Button, MenuItem, FormControlLabel, Checkbox, Grid} from "@mui/material";
+import {Grid} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
-import { Currency, mapToCurrency } from "../../types/Currency";
+import {Currency, mapToCurrency} from "../../types/Currency";
 import DateSelector from "./DateSelector";
 import RecipientsSelector from "./RecipientsSelector";
-
-export interface ExpenseData {
-    id: number;
-    title: string;
-    amount: number;
-    currency: Currency;
-    date: Date;
-    spenderUserId: number;
-    recipientIds: number[];
-}
-
-export interface UserData {
-    id: number,
-    firstName: string,
-    lastName: string,
-    tricountIds?: number[];
-    expenseIds?: number[];
-    checked?: boolean;
-}
+import SpenderSelector from "./SpenderSelector";
+import CurrencySelector from "./CurrencySelector";
+import FormActions from "../FormActions";
+import TricountService, {ExpenseData, UserData} from "../../services/TricountService";
+import TitleSelector from "./TitleSelector";
+import AmountSelector from "./AmountSelector";
 
 export default function NewExpense() {
-    const { id } = useParams();
+    const {id} = useParams();
     const [title, setTitle] = useState("");
     const [amount, setAmount] = useState(0);
     const [date, setDate] = useState(new Date());
@@ -36,7 +23,7 @@ export default function NewExpense() {
     const [currency, setCurrency] = useState(Currency[Currency.EUR]);
     const [userShares, setUserShares] = useState<Record<number, number>>({});
     const navigate = useNavigate();
-    
+
     const handleSelectChange = <T extends string | number>(
         event: React.ChangeEvent<{ value: unknown }>,
         setSpenderUserId: React.Dispatch<React.SetStateAction<T>>,
@@ -61,13 +48,8 @@ export default function NewExpense() {
 
     const fetchTricountUsers = async () => {
         try {
-            const tricountUserResponse: Response = await fetch(`/api/Tricount/${id}/Users`);
-            if (!tricountUserResponse.ok) {
-                throw new Error('Failed to fetch tricounts');
-            }
-
-            const usersData: UserData[] = await tricountUserResponse.json();
-            const updatedUsers = usersData.map(user => ({ ...user, checked: true }));
+            const usersData: UserData[] = await TricountService.fetchUsers(id!);
+            const updatedUsers = usersData.map(user => ({...user, checked: true}));
 
             setUsers(updatedUsers);
 
@@ -87,21 +69,21 @@ export default function NewExpense() {
     useEffect(() => {
         updateShares();
     }, [users]);
-    
-    const handleSubmit = async (event: any) => {
+
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
         setAmountError(false);
         setRecipientIds([]);
 
-        if (amount == 0) {
+        if (amount === 0) {
             setAmountError(true);
         }
 
         const recipientIds: number[] = users
             .filter((user) => user.checked)
             .map((user) => user.id);
-        
+
         setRecipientIds(recipientIds);
 
         const postData: ExpenseData = {
@@ -115,116 +97,34 @@ export default function NewExpense() {
         };
 
         try {
-            const postResponse = await fetch('/api/Tricount/{id}/Expenses', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(postData),
-            });
-
-            if (!postResponse.ok) {
-                throw new Error('Failed to post data');
-            }
-
+            await TricountService.createExpense(Number(id), postData);
             navigate(`/tricount/${id}`);
         } catch (err: any) {
-            console.log(err.message)
+            console.error(err.message);
         }
-    }
-
-    const goBackToTricount = async () => {
-        navigate(`/tricount/${id}`);
     }
 
     return (
         <React.Fragment>
             <form autoComplete="off" onSubmit={handleSubmit}>
-                <div style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
+                <div style={{display: 'flex', justifyContent: 'center', margin: '10px'}}>
                     <h2>Neue Ausgabe</h2>
                 </div>
-                <TextField
-                    label="Titel"
-                    onChange={e => setTitle(e.target.value)}
-                    variant="outlined"
-                    color="secondary"
-                    type="title"
-                    sx={{mb: 3}}
-                    fullWidth
-                    value={title}
-                />
+                <TitleSelector title={title} setTitle={setTitle}/>
                 <Grid container spacing={2}>
                     <Grid item xs={8}>
-                        <TextField
-                            label="Betrag"
-                            onChange={(e) => {
-                                setAmount(Number(e.target.value));
-                            }}
-                            required
-                            variant="outlined"
-                            color="secondary"
-                            type="amount"
-                            value={amount}
-                            fullWidth
-                            sx={{ mb: 3 }}
-                            error={amountError}
-                        />
+                        <AmountSelector amount={amount} setAmount={setAmount} amountError={amountError}/>
                     </Grid>
                     <Grid item xs={4}>
-                        <TextField
-                            label="Währung"
-                            onChange={(event) => handleSelectChange(event, setCurrency)}
-                            required
-                            variant="outlined"
-                            color="secondary"
-                            type="currency"
-                            value={currency}
-                            select
-                            fullWidth
-                            sx={{ mb: 3 }}
-                        >
-                            {Object.values(Currency)
-                                .filter((value) => typeof value === 'string')
-                                .map((currencyKey) => (
-                                    <MenuItem key={currencyKey} value={currencyKey}>
-                                        {currencyKey}
-                                    </MenuItem>
-                                ))}
-                        </TextField>
+                        <CurrencySelector currency={currency} setCurrency={setCurrency}
+                                          handleSelectChange={handleSelectChange}/>
                     </Grid>
                 </Grid>
-                <div>
-                    <DateSelector selectedDate={date} setDate={setDate} />
-                </div>
-                <TextField
-                    label="Bezahlt von"
-                    onChange={(event) => handleSelectChange(event, setSpenderUserId)}
-                    required
-                    variant="outlined"
-                    color="secondary"
-                    type="category"
-                    select
-                    fullWidth
-                    sx={{mb: 3}}
-                    value={spenderUserId || ''}
-                >
-                    {users.map((userData: UserData) => (
-                        <MenuItem key={userData.id} value={userData.id}>
-                            {userData.firstName} {userData.lastName}
-                        </MenuItem>
-                    ))}
-                </TextField>
-                <div>
-                    <RecipientsSelector users={users} userShares={userShares} setUsers={setUsers} currency={currency} />
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
-                    <Button variant="outlined" color="error" onClick={goBackToTricount}>
-                        Abbrechen
-                    </Button>
-                    <Button variant="outlined" color="secondary" type="submit">
-                        Sichern
-                    </Button>
-                </div>
+                <DateSelector selectedDate={date} setDate={setDate}/>
+                <SpenderSelector users={users} spenderUserId={spenderUserId} setSpenderUserId={setSpenderUserId}
+                                 handleSelectChange={handleSelectChange}/>
+                <RecipientsSelector users={users} userShares={userShares} setUsers={setUsers} currency={currency}/>
+                <FormActions prevPage={`/tricount/${id}`} navigate={navigate}/>
             </form>
         </React.Fragment>
     );
