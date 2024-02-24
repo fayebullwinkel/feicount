@@ -1,10 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {TextField, Button, MenuItem, FormControlLabel, Checkbox, Grid} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Currency, mapToCurrency } from "../../types/Currency";
+import DateSelector from "./DateSelector";
+import RecipientsSelector from "./RecipientsSelector";
 
-interface ExpenseData {
+export interface ExpenseData {
     id: number;
     title: string;
     amount: number;
@@ -14,7 +15,7 @@ interface ExpenseData {
     recipientIds: number[];
 }
 
-interface UserData {
+export interface UserData {
     id: number,
     firstName: string,
     lastName: string,
@@ -86,22 +87,6 @@ export default function NewExpense() {
     useEffect(() => {
         updateShares();
     }, [users]);
-
-    const handleChangeUser = (userId: number) => (event: { target: { checked: boolean; }; }) => {
-        setUsers(prevUsers => prevUsers.map((user) =>
-            user.id === userId ? { ...user, checked: event.target.checked } : user
-        ));
-    };
-
-    const parentCheckboxProps = {
-        checked: users.every((user) => user.checked),
-        indeterminate: users.some((user) => user.checked) && users.some((user) => !user.checked),
-        onChange: () => {
-            const allChecked = users.every((user) => user.checked);
-            const updatedUsers = users.map((user) => ({ ...user, checked: !allChecked }));
-            setUsers(updatedUsers);
-        },
-    };
     
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -208,23 +193,9 @@ export default function NewExpense() {
                         </TextField>
                     </Grid>
                 </Grid>
-                <TextField
-                    label="Datum"
-                    onChange={(e) => setDate(new Date(e.target.value))}
-                    required
-                    variant="outlined"
-                    color="secondary"
-                    type="date"
-                    value={date.toISOString().split('T')[0]}
-                    fullWidth
-                    sx={{ mb: 3 }}
-                >
-                    <DatePicker
-                        label="Controlled picker"
-                        value={date}
-                        onChange={(newValue) => setDate(newValue || new Date())}
-                    />
-                </TextField>
+                <div>
+                    <DateSelector selectedDate={date} setDate={setDate} />
+                </div>
                 <TextField
                     label="Bezahlt von"
                     onChange={(event) => handleSelectChange(event, setSpenderUserId)}
@@ -244,24 +215,7 @@ export default function NewExpense() {
                     ))}
                 </TextField>
                 <div>
-                    <div style={{ backgroundColor: 'lightgrey', padding: '10px' }}>
-                        <FormControlLabel label="Für wen" control={<Checkbox {...parentCheckboxProps} />} />
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', padding: '10px' }}>
-                        {users.map((user) => (
-                            <div key={user.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div>
-                                    <FormControlLabel
-                                        label={`${user.firstName} ${user.lastName}`}
-                                        control={<Checkbox checked={user.checked} onChange={handleChangeUser(user.id)} />}
-                                    />
-                                </div>
-                                <div>
-                                    {userShares[user.id]?.toFixed(2).replace('.', ',') || '0,00'} {currency}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <RecipientsSelector users={users} userShares={userShares} setUsers={setUsers} currency={currency} />
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
                     <Button variant="outlined" color="error" onClick={goBackToTricount}>
