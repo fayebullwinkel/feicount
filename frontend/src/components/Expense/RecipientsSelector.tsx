@@ -1,6 +1,6 @@
-import { Checkbox, FormControlLabel, TextField } from "@mui/material";
+import {Checkbox, FormControlLabel, TextField} from "@mui/material";
 import React from "react";
-import { UserData } from "../../services/TricountService";
+import {UserData} from "../../services/TricountService";
 
 interface RecipientsSelectorProps {
     users: UserData[];
@@ -35,20 +35,20 @@ const RecipientsSelector = ({
     ) => {
         setUsers((prevUsers) =>
             prevUsers.map((user) =>
-                user.id === userId ? { ...user, checked: event.target.checked } : user
+                user.id === userId ? {...user, checked: event.target.checked} : user
             )
         );
     };
 
     return (
         <div>
-            <div style={{ backgroundColor: "lightgrey", padding: "10px" }}>
+            <div style={{backgroundColor: "lightgrey", padding: "10px"}}>
                 <FormControlLabel
                     label="Für wen"
                     control={<Checkbox {...parentCheckboxProps} />}
                 />
             </div>
-            <div style={{ display: "flex", flexDirection: "column", padding: "10px" }}>
+            <div style={{display: "flex", flexDirection: "column", padding: "10px"}}>
                 {users.map((user) => (
                     <div
                         key={user.id}

@@ -49,7 +49,11 @@ export default function NewExpense() {
     const fetchTricountUsers = async () => {
         try {
             const usersData: UserData[] = await TricountService.fetchUsers(id!);
-            const updatedUsers = usersData.map(user => ({...user, checked: true}));
+            const isUsersUpdated = users && users.length > 0;
+            const updatedUsers = usersData.map(user => ({
+                ...user,
+                checked: isUsersUpdated ? users.some(u => u.id === user.id && u.checked) : true
+            }));
 
             setUsers(updatedUsers);
 
