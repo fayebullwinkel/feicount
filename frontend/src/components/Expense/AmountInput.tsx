@@ -1,7 +1,7 @@
 import {TextField} from "@mui/material";
 import React, {useState} from "react";
 
-interface AmountSelectorProps {
+interface AmountInputProps {
     amount: number;
     setAmount: React.Dispatch<React.SetStateAction<number>>;
     amountError: boolean;
@@ -28,7 +28,7 @@ function formatPrice(value: number): string {
     return (value / 100 >> 0).toString().padStart(1, "0") + "," + Math.abs(value % 100).toString().padStart(2, "0")
 }
 
-export default function AmountSelector({ amount, setAmount, amountError }: AmountSelectorProps) {
+export default function AmountInput({ amount, setAmount, amountError }: AmountInputProps) {
     const [amountString, setAmountString] = useState("");
     
     return (

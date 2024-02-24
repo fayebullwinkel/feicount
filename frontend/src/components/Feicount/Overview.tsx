@@ -4,17 +4,17 @@ import Button from '@mui/material/Button';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import {NavigateFunction, useNavigate} from 'react-router-dom';
 
-interface TricountOverviewProps {
+interface FeicountOverviewProps {
     id: string;
     title: string;
     description: string;
 }
 
-const TricountOverview: React.FC<TricountOverviewProps> = ({id, title, description}) => {
+const FeicountOverview: React.FC<FeicountOverviewProps> = ({id, title, description}) => {
     const navigate: NavigateFunction = useNavigate();
 
-    const goToTricount = () => {
-        navigate(`/tricount/${id}`);
+    const goToFeicount = () => {
+        navigate(`/feicount/${id}`);
     };
 
     return (
@@ -25,7 +25,7 @@ const TricountOverview: React.FC<TricountOverviewProps> = ({id, title, descripti
                     {description}
                 </Grid>
                 <Grid item xs={4} display="flex" justifyContent="center" alignItems="center">
-                    <Button variant="text" onClick={goToTricount}>
+                    <Button variant="text" onClick={goToFeicount}>
                         <ArrowForwardIosIcon/>
                     </Button>
                 </Grid>
@@ -34,4 +34,4 @@ const TricountOverview: React.FC<TricountOverviewProps> = ({id, title, descripti
     );
 };
 
-export default TricountOverview;
+export default FeicountOverview;

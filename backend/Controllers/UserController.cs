@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using tricount.Controllers.Mappers;
-using tricount.Controllers.Types;
-using tricount.Models;
-using tricount.Services;
+using feicount.Controllers.Mappers;
+using feicount.Controllers.Types;
+using feicount.Models;
+using feicount.Services;
 
-namespace tricount.Controllers;
+namespace feicount.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]

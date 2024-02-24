@@ -1,24 +1,24 @@
-using tricount.Controllers.Types;
-using tricount.Models;
+using feicount.Controllers.Types;
+using feicount.Models;
 
-namespace tricount.Controllers.Mappers;
+namespace feicount.Controllers.Mappers;
 
 public interface IUserMapper
 {
-    public User ToUser(UserDto dto, List<Tricount> tricounts, List<Expense> expenses);
+    public User ToUser(UserDto dto, List<Feicount> feicounts, List<Expense> expenses);
     public UserDto ToUserDto(User model);
 }
 
 public class UserMapper: IUserMapper
 {
-    public User ToUser(UserDto dto, List<Tricount> tricounts, List<Expense> expenses)
+    public User ToUser(UserDto dto, List<Feicount> feicounts, List<Expense> expenses)
     {
         return new User
         {
             Id = dto.Id,
             FirstName = dto.FirstName,
             LastName = dto.LastName,
-            Tricounts = tricounts,
+            Feicounts = feicounts,
             Expenses = expenses
         };
     }
@@ -30,7 +30,7 @@ public class UserMapper: IUserMapper
             Id = model.Id,
             FirstName = model.FirstName,
             LastName = model.LastName,
-            TricountIds = model.Tricounts.Select(tricount => tricount.Id).ToList(),
+            FeicountIds = model.Feicounts.Select(feicount => feicount.Id).ToList(),
             ExpenseIds = model.Expenses.Select(expense => expense.Id).ToList()
         };
     }

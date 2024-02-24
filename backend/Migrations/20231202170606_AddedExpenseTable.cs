@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace tricount.Migrations
+namespace feicount.Migrations
 {
     /// <inheritdoc />
     public partial class AddedExpenseTable : Migration
@@ -22,15 +22,15 @@ namespace tricount.Migrations
                     Amount = table.Column<int>(type: "integer", nullable: false),
                     Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     SpenderUserId = table.Column<int>(type: "integer", nullable: false),
-                    TricountId = table.Column<int>(type: "integer", nullable: false)
+                    FeicountId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Expenses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Expenses_Tricounts_TricountId",
-                        column: x => x.TricountId,
-                        principalTable: "Tricounts",
+                        name: "FK_Expenses_Feicounts_FeicountId",
+                        column: x => x.FeicountId,
+                        principalTable: "Feicounts",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -60,9 +60,9 @@ namespace tricount.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expenses_TricountId",
+                name: "IX_Expenses_FeicountId",
                 table: "Expenses",
-                column: "TricountId");
+                column: "FeicountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ExpenseUser_RecipientsId",

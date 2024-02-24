@@ -1,4 +1,4 @@
-namespace tricount;
+namespace feicount;
 
 public class WeatherForecast
 {

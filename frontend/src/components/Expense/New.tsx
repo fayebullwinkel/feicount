@@ -5,11 +5,11 @@ import {Currency, mapToCurrency} from "../../types/Currency";
 import DateSelector from "./DateSelector";
 import RecipientsSelector from "./RecipientsSelector";
 import SpenderSelector from "./SpenderSelector";
-import CurrencySelector from "./CurrencySelector";
+import CurrencySelector from "../Shared/CurrencySelector";
 import FormActions from "../FormActions";
-import TricountService, {ExpenseData, UserData} from "../../services/TricountService";
-import TitleSelector from "./TitleSelector";
-import AmountSelector from "./AmountSelector";
+import FeicountService, {ExpenseData, UserData} from "../../services/FeicountService";
+import TitleInput from "./TitleInput";
+import AmountInput from "./AmountInput";
 
 export default function NewExpense() {
     const {id} = useParams();
@@ -22,17 +22,11 @@ export default function NewExpense() {
     const [users, setUsers] = useState<UserData[]>([]);
     const [currency, setCurrency] = useState(Currency[Currency.EUR]);
     const navigate = useNavigate();
+    
 
-    const handleSelectChange = <T extends string | number>(
-        event: React.ChangeEvent<{ value: unknown }>,
-        setSpenderUserId: React.Dispatch<React.SetStateAction<T>>,
-    ) => {
-        setSpenderUserId(event.target.value as T);
-    };
-
-    const fetchTricountUsers = async () => {
+    const fetchFeicountUsers = async () => {
         try {
-            const usersData: UserData[] = await TricountService.fetchUsers(id!);
+            const usersData: UserData[] = await FeicountService.fetchUsers(id!);
             const isUsersUpdated = users && users.length > 0;
             const updatedUsers = usersData.map(user => ({
                 ...user,
@@ -51,7 +45,7 @@ export default function NewExpense() {
     };
 
     useEffect(() => {
-        fetchTricountUsers();
+        fetchFeicountUsers();
     }, [amount]);
 
     const handleSubmit = async (event: React.FormEvent) => {
@@ -81,8 +75,8 @@ export default function NewExpense() {
         };
 
         try {
-            await TricountService.createExpense(Number(id), postData);
-            navigate(`/tricount/${id}`);
+            await FeicountService.createExpense(Number(id), postData);
+            navigate(`/feicount/${id}`);
         } catch (err: any) {
             console.error(err.message);
         }
@@ -94,21 +88,19 @@ export default function NewExpense() {
                 <div style={{display: 'flex', justifyContent: 'center', margin: '10px'}}>
                     <h2>Neue Ausgabe</h2>
                 </div>
-                <TitleSelector title={title} setTitle={setTitle}/>
+                <TitleInput title={title} setTitle={setTitle}/>
                 <Grid container spacing={2}>
                     <Grid item xs={8}>
-                        <AmountSelector amount={amount} setAmount={setAmount} amountError={amountError}/>
+                        <AmountInput amount={amount} setAmount={setAmount} amountError={amountError}/>
                     </Grid>
                     <Grid item xs={4}>
-                        <CurrencySelector currency={currency} setCurrency={setCurrency}
-                                          handleSelectChange={handleSelectChange}/>
+                        <CurrencySelector currency={currency} setCurrency={setCurrency} />
                     </Grid>
                 </Grid>
                 <DateSelector selectedDate={date} setDate={setDate}/>
-                <SpenderSelector users={users} spenderUserId={spenderUserId} setSpenderUserId={setSpenderUserId}
-                                 handleSelectChange={handleSelectChange}/>
+                <SpenderSelector users={users} spenderUserId={spenderUserId} setSpenderUserId={setSpenderUserId} />
                 <RecipientsSelector users={users} setUsers={setUsers} currency={currency} amount={amount}/>
-                <FormActions prevPage={`/tricount/${id}`} navigate={navigate}/>
+                <FormActions prevPage={`/feicount/${id}`} navigate={navigate}/>
             </form>
         </React.Fragment>
     );

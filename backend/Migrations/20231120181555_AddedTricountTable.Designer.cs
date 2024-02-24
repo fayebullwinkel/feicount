@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using tricount.Data;
+using feicount.Data;
 
 #nullable disable
 
-namespace tricount.Migrations
+namespace feicount.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20231120181555_AddedTricountTable")]
-    partial class AddedTricountTable
+    [Migration("20231120181555_AddedFeicountTable")]
+    partial class AddedFeicountTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace tricount.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("tricount.Models.Tricount", b =>
+            modelBuilder.Entity("feicount.Models.Feicount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -47,10 +47,10 @@ namespace tricount.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tricounts");
+                    b.ToTable("Feicounts");
                 });
 
-            modelBuilder.Entity("tricount.Models.User", b =>
+            modelBuilder.Entity("feicount.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

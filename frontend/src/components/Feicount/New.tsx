@@ -2,10 +2,14 @@ import React, {useState} from "react";
 import {TextField, Button, MenuItem, Box, List, ListItem, ListItemText} from "@mui/material";
 import {Currency, mapToCurrency} from "../../types/Currency";
 import {Category, mapToCategory} from "../../types/Category";
-import {TricountData} from "../Home";
+import {FeicountData} from "../Home";
 import {useNavigate} from "react-router-dom";
+import FormActions from "../FormActions";
+import TitleInput from "./TitleInput";
+import DescriptionInput from "./DescriptionInput";
+import CurrencySelector from "../Shared/CurrencySelector";
 
-export default function NewTricount() {
+export default function NewFeicount() {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [currency, setCurrency] = useState(Currency[Currency.EUR]);
@@ -15,17 +19,6 @@ export default function NewTricount() {
     const [userNames, setUserNames] = useState<string[]>([]);
     const [editIndex, setEditIndex] = useState<number | null>(null);
     const navigate = useNavigate();
-    const handleSelectChange = (
-        event: React.ChangeEvent<{ value: unknown }>,
-        setState: React.Dispatch<React.SetStateAction<string>>,
-    ) => {
-        const selectedKey = event.target.value as string;
-        setState(selectedKey);
-    };
-
-    const handleInputChange = (value: React.SetStateAction<string>) => {
-        setCurrentUser(value);
-    };
 
     const handleSaveInput = () => {
         if (currentUser.trim() !== '') {
@@ -73,7 +66,7 @@ export default function NewTricount() {
             return { firstName, lastName };
         })
 
-        const postData: TricountData = {
+        const postData: FeicountData = {
             id: 0,
             title,
             description,
@@ -85,7 +78,7 @@ export default function NewTricount() {
         };
 
         try {
-            const postResponse = await fetch('/api/Tricount', {
+            const postResponse = await fetch('/api/Feicount', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -103,61 +96,18 @@ export default function NewTricount() {
         }
     }
 
-    const goToHome = async () => {
-        navigate('/');
-    }
-
     return (
         <React.Fragment>
             <form autoComplete="off" onSubmit={handleSubmit}>
                 <div style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
-                    <h2>Neuer Tricount</h2>
+                    <h2>Neuer Feicount</h2>
                 </div>
-                <TextField
-                    label="Titel"
-                    onChange={e => setTitle(e.target.value)}
-                    required
-                    variant="outlined"
-                    color="secondary"
-                    type="title"
-                    sx={{mb: 3}}
-                    fullWidth
-                    value={title}
-                    error={titleError}
-                />
-                <TextField
-                    label="Beschreibung"
-                    onChange={e => setDescription(e.target.value)}
-                    variant="outlined"
-                    color="secondary"
-                    type="description"
-                    value={description}
-                    fullWidth
-                    sx={{mb: 3}}
-                />
-                <TextField
-                    label="Währung"
-                    onChange={(event) => handleSelectChange(event, setCurrency)}
-                    required
-                    variant="outlined"
-                    color="secondary"
-                    type="currency"
-                    value={currency}
-                    select
-                    fullWidth
-                    sx={{mb: 3}}
-                >
-                    {Object.values(Currency)
-                        .filter((value) => typeof value === 'string')
-                        .map((currencyKey) => (
-                            <MenuItem key={currencyKey} value={currencyKey}>
-                                {currencyKey}
-                            </MenuItem>
-                        ))}
-                </TextField>
+                <TitleInput title={title} setTitle={setTitle} titleError={titleError}/>
+                <DescriptionInput description={description} setDescription={setDescription}/>
+                <CurrencySelector currency={currency} setCurrency={setCurrency}/>
                 <TextField
                     label="Kategorie"
-                    onChange={(event) => handleSelectChange(event, setCategory)}
+                    onChange={(event) => setCategory(event.target.value)}
                     required
                     variant="outlined"
                     color="secondary"
@@ -180,7 +130,7 @@ export default function NewTricount() {
                         <TextField
                             label="Teilnehmer:innen"
                             value={currentUser}
-                            onChange={(e) => handleInputChange(e.target.value)}
+                            onChange={(e) => setCurrentUser(e.target.value)}
                             fullWidth
                             sx={{ marginRight: '8px' }}
                         />
@@ -206,14 +156,7 @@ export default function NewTricount() {
                         </List>
                     )}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
-                    <Button variant="outlined" color="error" onClick={goToHome}>
-                        Abbrechen
-                    </Button>
-                    <Button variant="outlined" color="secondary" type="submit">
-                        Sichern
-                    </Button>
-                </div>
+                <FormActions prevPage={'/'} navigate={navigate}/>
             </form>
         </React.Fragment>
     );

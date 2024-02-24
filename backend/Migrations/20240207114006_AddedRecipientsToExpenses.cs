@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace tricount.Migrations
+namespace feicount.Migrations
 {
     /// <inheritdoc />
     public partial class AddedRecipientsToExpenses : Migration

@@ -1,8 +1,8 @@
-﻿using tricount.Controllers.Types;
+﻿using feicount.Controllers.Types;
 
-namespace tricount.Models;
+namespace feicount.Models;
 
-public class TricountDto
+public class FeicountDto
 {
     public int Id { get; set; }
     public string Title { get; set; }

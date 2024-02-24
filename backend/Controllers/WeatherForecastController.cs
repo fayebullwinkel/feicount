@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace tricount.Controllers;
+namespace feicount.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]

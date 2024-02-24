@@ -1,4 +1,4 @@
-namespace tricount.Models;
+namespace feicount.Models;
 
 public class Expense
 {
@@ -10,5 +10,5 @@ public class Expense
     public DateTime Date { get; set; }
     public User Spender { get; set; }
     public List<User> Recipients { get; set; } = new();
-    public Tricount Tricount { get; set; }
+    public Feicount Feicount { get; set; }
 }

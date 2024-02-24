@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using tricount.Controllers.Types;
-using tricount.Models;
+using feicount.Controllers.Types;
+using feicount.Models;
 
-namespace tricount.Data;
+namespace feicount.Data;
 
 public interface IUserRepository
 {
@@ -25,7 +25,7 @@ public class UserRepository : IUserRepository
     public List<User> FindAll()
     {
         return _ctx.Users
-            .Include(u => u.Tricounts)
+            .Include(u => u.Feicounts)
             .Include(u => u.Expenses)
             .ToList();
     }
@@ -33,7 +33,7 @@ public class UserRepository : IUserRepository
     public User? FindById(int id)
     {
         return _ctx.Users
-            .Include(u => u.Tricounts)
+            .Include(u => u.Feicounts)
             .Include(u => u.Expenses)
             .FirstOrDefault(u => u.Id == id);
     }

@@ -1,43 +1,43 @@
 using System.Diagnostics;
-using tricount.Controllers.Mappers;
-using tricount.Controllers.Types;
-using tricount.Data;
-using tricount.Models;
+using feicount.Controllers.Mappers;
+using feicount.Controllers.Types;
+using feicount.Data;
+using feicount.Models;
 
-namespace tricount.Services;
+namespace feicount.Services;
 
-public interface ITricountService
+public interface IFeicountService
 {
-    public void CreateTricount(TricountDto dto);
-    public List<Tricount> FindAll();
-    public Tricount FindById(int id);
+    public void CreateFeicount(FeicountDto dto);
+    public List<Feicount> FindAll();
+    public Feicount FindById(int id);
     public void Delete(int id);
-    public List<Expense> GetTricountExpenses(int id);
-    public List<User> GetTricountUsers(int id);
-    public void AddExpenseToTricount(int tricountId, ExpenseDto dto);
+    public List<Expense> GetFeicountExpenses(int id);
+    public List<User> GetFeicountUsers(int id);
+    public void AddExpenseToFeicount(int feicountId, ExpenseDto dto);
     public void DeleteExpense(int expenseId);
-    public void DeleteTricountUser(int tricountId, int userId);
-    public void AddUserToTricount(int tricountId, int userId);
-    public List<Transaction> GetTricountTransactions(int id);
+    public void DeleteFeicountUser(int feicountId, int userId);
+    public void AddUserToFeicount(int feicountId, int userId);
+    public List<Transaction> GetFeicountTransactions(int id);
 }
 
-public class TricountService : ITricountService
+public class FeicountService : IFeicountService
 {
     private readonly IExpenseRepository _expenseRepository;
-    private readonly ITricountRepository _tricountRepository;
+    private readonly IFeicountRepository _feicountRepository;
     private readonly IUserRepository _userRepository;
-    private readonly ITricountMapper _tricountMapper;
+    private readonly IFeicountMapper _feicountMapper;
 
-    public TricountService(IExpenseRepository expenseRepository, ITricountRepository tricountRepository,
-        IUserRepository userRepository, ITricountMapper tricountMapper)
+    public FeicountService(IExpenseRepository expenseRepository, IFeicountRepository feicountRepository,
+        IUserRepository userRepository, IFeicountMapper feicountMapper)
     {
         _expenseRepository = expenseRepository;
-        _tricountRepository = tricountRepository;
+        _feicountRepository = feicountRepository;
         _userRepository = userRepository;
-        _tricountMapper = tricountMapper;
+        _feicountMapper = feicountMapper;
     }
 
-    public void CreateTricount(TricountDto dto)
+    public void CreateFeicount(FeicountDto dto)
     {
         var users = dto.UserNames.Select(userName => _userRepository.FindByNameOrCreate(userName)).ToList();
         var expenses = dto.ExpenseIds.Select(expenseId => _expenseRepository.FindById(expenseId)).ToList();
@@ -47,44 +47,44 @@ public class TricountService : ITricountService
             throw new ArgumentNullException($"One or more {expenses} not found.");
         }
 
-        var tricount = _tricountMapper.ToTricount(dto, users, expenses!);
-        _tricountRepository.Create(tricount);
+        var feicount = _feicountMapper.ToFeicount(dto, users, expenses!);
+        _feicountRepository.Create(feicount);
     }
 
-    public List<Expense> GetTricountExpenses(int id)
+    public List<Expense> GetFeicountExpenses(int id)
     {
-        return _expenseRepository.FindForTricount(id);
+        return _expenseRepository.FindForFeicount(id);
     }
     
-    public List<User> GetTricountUsers(int id)
+    public List<User> GetFeicountUsers(int id)
     {
-        return _tricountRepository.GetUsers(id);
+        return _feicountRepository.GetUsers(id);
     }
 
-    public List<Tricount> FindAll()
+    public List<Feicount> FindAll()
     {
-        return _tricountRepository.FindAll();
+        return _feicountRepository.FindAll();
     }
 
-    public Tricount FindById(int id)
+    public Feicount FindById(int id)
     {
-        return _tricountRepository.FindById(id) ?? throw new InvalidOperationException();
+        return _feicountRepository.FindById(id) ?? throw new InvalidOperationException();
     }
 
     public void Delete(int id)
     {
-        _tricountRepository.Delete(id);
+        _feicountRepository.Delete(id);
     }
 
-    public void AddExpenseToTricount(int tricountId, ExpenseDto dto)
+    public void AddExpenseToFeicount(int feicountId, ExpenseDto dto)
     {
-        var tricount = _tricountRepository.FindById(tricountId);
+        var feicount = _feicountRepository.FindById(feicountId);
         var spender = _userRepository.FindById(dto.SpenderUserId);
         var recipients = dto.RecipientIds.Select(recipientId => _userRepository.FindById(recipientId)).ToList();
 
-        if (tricount == null)
+        if (feicount == null)
         {
-            throw new ArgumentNullException($"{tricount} not found.");
+            throw new ArgumentNullException($"{feicount} not found.");
         }
 
         if (spender == null)
@@ -97,9 +97,9 @@ public class TricountService : ITricountService
             throw new ArgumentNullException($"One or more {recipients} not found.");
         }
 
-        var expense = _tricountMapper.ToExpense(dto, spender, recipients!, tricount);
+        var expense = _feicountMapper.ToExpense(dto, spender, recipients!, feicount);
         _expenseRepository.Create(expense);
-        _tricountRepository.AddExpenseToTricount(tricount, expense);
+        _feicountRepository.AddExpenseToFeicount(feicount, expense);
     }
 
     public void DeleteExpense(int expenseId)
@@ -107,27 +107,27 @@ public class TricountService : ITricountService
         _expenseRepository.Delete(expenseId);
     }
 
-    public void AddUserToTricount(int tricountId, int userId)
+    public void AddUserToFeicount(int feicountId, int userId)
     {
-        var tricount = _tricountRepository.FindById(tricountId);
+        var feicount = _feicountRepository.FindById(feicountId);
         var user = _userRepository.FindById(userId);
 
-        if (tricount == null)
+        if (feicount == null)
         {
-            throw new ArgumentNullException($"{tricount} not found.");
+            throw new ArgumentNullException($"{feicount} not found.");
         }
 
-        _tricountRepository.AddUserToTricount(tricount, user);
+        _feicountRepository.AddUserToFeicount(feicount, user);
     }
 
-    public void DeleteTricountUser(int tricountId, int userId)
+    public void DeleteFeicountUser(int feicountId, int userId)
     {
-        var tricount = FindById(tricountId);
+        var feicount = FindById(feicountId);
         var user = _userRepository.FindById(userId);
 
-        if (tricount == null)
+        if (feicount == null)
         {
-            throw new ArgumentNullException($"{tricount} not found.");
+            throw new ArgumentNullException($"{feicount} not found.");
         }
 
         if (user == null)
@@ -137,15 +137,15 @@ public class TricountService : ITricountService
 
         if (user.Expenses.Count != 0)
         {
-            DistributeRemainingUserExpenses(tricount, user);
+            DistributeRemainingUserExpenses(feicount, user);
         }
 
-        _tricountRepository.DeleteTricountUser(tricount, user!);
+        _feicountRepository.DeleteFeicountUser(feicount, user!);
     }
 
-    public void DistributeRemainingUserExpenses(Tricount tricount, User userToDelete)
+    public void DistributeRemainingUserExpenses(Feicount feicount, User userToDelete)
     {
-        var users = tricount.Users.Where(user => user.Id != userToDelete.Id);
+        var users = feicount.Users.Where(user => user.Id != userToDelete.Id);
 
         foreach (var expense in userToDelete.Expenses)
         {
@@ -154,9 +154,9 @@ public class TricountService : ITricountService
         }
     }
 
-    public List<Transaction> GetTricountTransactions(int id)
+    public List<Transaction> GetFeicountTransactions(int id)
     {
-        var tricount = _tricountRepository.FindById(id);
-        return tricount.CalculateTransactions();
+        var feicount = _feicountRepository.FindById(id);
+        return feicount.CalculateTransactions();
     }
 }

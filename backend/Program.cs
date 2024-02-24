@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using tricount.Controllers.Mappers;
-using tricount.Data;
-using tricount.Services;
+using feicount.Controllers.Mappers;
+using feicount.Data;
+using feicount.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,13 +14,13 @@ builder.Services.AddDbContext<ApplicationDBContext>(options =>
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITricountRepository, TricountRepository>();
+builder.Services.AddScoped<IFeicountRepository, FeicountRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 
-builder.Services.AddScoped<ITricountMapper, TricountMapper>();
+builder.Services.AddScoped<IFeicountMapper, FeicountMapper>();
 builder.Services.AddScoped<IUserMapper, UserMapper>();
 
-builder.Services.AddScoped<ITricountService, TricountService>();
+builder.Services.AddScoped<IFeicountService, FeicountService>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();

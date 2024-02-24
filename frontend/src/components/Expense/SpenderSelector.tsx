@@ -1,21 +1,17 @@
 import {MenuItem, TextField} from "@mui/material";
-import { UserData } from "../../services/TricountService";
+import { UserData } from "../../services/FeicountService";
 
 interface SpenderSelectorProps {
     users: UserData[];
     spenderUserId: number;
     setSpenderUserId: React.Dispatch<React.SetStateAction<number>>;
-    handleSelectChange: <T extends string | number>(
-        event: React.ChangeEvent<{ value: unknown }>,
-        setSpenderUserId: React.Dispatch<React.SetStateAction<T>>,
-    ) => void;
 }
 
-export default function SpenderSelector({ users, spenderUserId, setSpenderUserId, handleSelectChange }: SpenderSelectorProps) {
+export default function SpenderSelector({ users, spenderUserId, setSpenderUserId }: SpenderSelectorProps) {
     return (
         <TextField
             label="Bezahlt von"
-            onChange={(event) => handleSelectChange(event, setSpenderUserId)}
+            onChange={(event) => setSpenderUserId(Number(event.target.value))}
             required
             variant="outlined"
             color="secondary"

@@ -1,6 +1,6 @@
-﻿namespace tricount.Models;
+﻿namespace feicount.Models;
 
-public class Tricount
+public class Feicount
 {
     public int Id { get; set; }
     public string Title { get; set; }

@@ -1,22 +1,22 @@
-using tricount.Controllers.Types;
-using tricount.Models;
+using feicount.Controllers.Types;
+using feicount.Models;
 
-namespace tricount.Controllers.Mappers;
+namespace feicount.Controllers.Mappers;
 
-public interface ITricountMapper
+public interface IFeicountMapper
 {
-    public Tricount ToTricount(TricountDto dto, List<User> users, List<Expense> expenses);
-    public TricountDto ToTricountDto(Tricount model);
-    public Expense ToExpense(ExpenseDto dto, User spender, List<User> recipients, Tricount tricount);
+    public Feicount ToFeicount(FeicountDto dto, List<User> users, List<Expense> expenses);
+    public FeicountDto ToFeicountDto(Feicount model);
+    public Expense ToExpense(ExpenseDto dto, User spender, List<User> recipients, Feicount feicount);
     public ExpenseDto ToExpenseDto(Expense model);
     public UserDto ToUserDto(User model);
 }
 
-public class TricountMapper: ITricountMapper
+public class FeicountMapper: IFeicountMapper
 {
-    public Tricount ToTricount(TricountDto dto, List<User> users, List<Expense> expenses)
+    public Feicount ToFeicount(FeicountDto dto, List<User> users, List<Expense> expenses)
     {
-        return new Tricount
+        return new Feicount
         {
             Id = dto.Id,
             Title = dto.Title,
@@ -28,9 +28,9 @@ public class TricountMapper: ITricountMapper
         };
     }
     
-    public TricountDto ToTricountDto(Tricount model)
+    public FeicountDto ToFeicountDto(Feicount model)
     {
-        return new TricountDto
+        return new FeicountDto
         {
             Id = model.Id,
             Title = model.Title,
@@ -42,7 +42,7 @@ public class TricountMapper: ITricountMapper
         };
     }
 
-    public Expense ToExpense(ExpenseDto dto, User spender, List<User> recipients, Tricount tricount)
+    public Expense ToExpense(ExpenseDto dto, User spender, List<User> recipients, Feicount feicount)
     {
         return new Expense
         {
@@ -52,7 +52,7 @@ public class TricountMapper: ITricountMapper
             Date = dto.Date,
             Spender = spender,
             Recipients = recipients,
-            Tricount = tricount
+            Feicount = feicount
         };
     }
     
@@ -76,7 +76,7 @@ public class TricountMapper: ITricountMapper
             Id = model.Id,
             FirstName = model.FirstName,
             LastName = model.LastName,
-            TricountIds = model.Tricounts.Select(t => t.Id).ToList(),
+            FeicountIds = model.Feicounts.Select(t => t.Id).ToList(),
             ExpenseIds = model.Expenses.Select(e => e.Id).ToList()
         };
     }

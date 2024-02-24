@@ -1,87 +1,87 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using tricount.Models;
+using feicount.Models;
 
-namespace tricount.Data;
+namespace feicount.Data;
 
-public interface ITricountRepository
+public interface IFeicountRepository
 {
-    public List<Tricount> FindAll();
-    public Tricount? FindById(int id);
-    public Tricount Create(Tricount tricount);
+    public List<Feicount> FindAll();
+    public Feicount? FindById(int id);
+    public Feicount Create(Feicount feicount);
     public void Delete(int id);
-    public void AddExpenseToTricount(Tricount tricount, Expense expense);
-    public void AddUserToTricount(Tricount tricount, User user);
+    public void AddExpenseToFeicount(Feicount feicount, Expense expense);
+    public void AddUserToFeicount(Feicount feicount, User user);
     public List<User> GetUsers(int id);
-    public void DeleteTricountUser(Tricount tricount, User user);
-    public Tricount? GetTricountForExpense(int expenseId);
+    public void DeleteFeicountUser(Feicount feicount, User user);
+    public Feicount? GetFeicountForExpense(int expenseId);
 }
 
-public class TricountRepository : ITricountRepository
+public class FeicountRepository : IFeicountRepository
 {
     private readonly ApplicationDBContext _ctx;
 
-    public TricountRepository(ApplicationDBContext context)
+    public FeicountRepository(ApplicationDBContext context)
     {
         _ctx = context;
     }
     
-    public List<Tricount> FindAll()
+    public List<Feicount> FindAll()
     {
-        return _ctx.Tricounts
+        return _ctx.Feicounts
             .Include(t => t.Users)
             .Include(t => t.Expenses)
             .ToList();
     }
 
-    public Tricount? FindById(int id)
+    public Feicount? FindById(int id)
     {
-        return _ctx.Tricounts
+        return _ctx.Feicounts
             .Include(t => t.Users)
             .Include(t => t.Expenses)
                 .ThenInclude(e => e.Recipients)
             .FirstOrDefault(t => t.Id == id);
     }
 
-    public Tricount Create(Tricount tricount)
+    public Feicount Create(Feicount feicount)
     {
-        _ctx.Tricounts.Add(tricount);
+        _ctx.Feicounts.Add(feicount);
         _ctx.SaveChanges();
-        return tricount;
+        return feicount;
     }
 
     public void Delete(int id)
     {
-        var tricount = FindById(id);
-        _ctx.Tricounts.Remove(tricount);
+        var feicount = FindById(id);
+        _ctx.Feicounts.Remove(feicount);
         _ctx.SaveChanges();
     }
 
-    public void AddExpenseToTricount(Tricount tricount, Expense expense)
+    public void AddExpenseToFeicount(Feicount feicount, Expense expense)
     {
-        tricount.Expenses.Add(expense);
+        feicount.Expenses.Add(expense);
         _ctx.SaveChanges();
     }
     
-    public void AddUserToTricount(Tricount tricount, User user)
+    public void AddUserToFeicount(Feicount feicount, User user)
     {
-        tricount.Users.Add(user);
+        feicount.Users.Add(user);
         _ctx.SaveChanges();
     }
 
     public List<User> GetUsers(int id)
     {
-        var tricount = FindById(id);
-        return tricount.Users;
+        var feicount = FindById(id);
+        return feicount.Users;
     }
 
-    public void DeleteTricountUser(Tricount tricount, User user)
+    public void DeleteFeicountUser(Feicount feicount, User user)
     {
-        tricount.Users.Remove(user);
+        feicount.Users.Remove(user);
         _ctx.SaveChanges();
     }
 
-    public Tricount? GetTricountForExpense(int expenseId)
+    public Feicount? GetFeicountForExpense(int expenseId)
     {
-        return _ctx.Tricounts.FirstOrDefault(t => t.Id == expenseId);
+        return _ctx.Feicounts.FirstOrDefault(t => t.Id == expenseId);
     }
 }

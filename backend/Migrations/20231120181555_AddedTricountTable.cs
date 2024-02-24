@@ -3,16 +3,16 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace tricount.Migrations
+namespace feicount.Migrations
 {
     /// <inheritdoc />
-    public partial class AddedTricountTable : Migration
+    public partial class AddedFeicountTable : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Tricounts",
+                name: "Feicounts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
@@ -24,7 +24,7 @@ namespace tricount.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tricounts", x => x.Id);
+                    table.PrimaryKey("PK_Feicounts", x => x.Id);
                 });
         }
 
@@ -32,7 +32,7 @@ namespace tricount.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Tricounts");
+                name: "Feicounts");
         }
     }
 }

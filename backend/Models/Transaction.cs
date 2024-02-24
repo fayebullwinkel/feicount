@@ -1,4 +1,4 @@
-namespace tricount.Models;
+namespace feicount.Models;
 
 public class Transaction(int debtorId, int creditorId, int amount)
 {

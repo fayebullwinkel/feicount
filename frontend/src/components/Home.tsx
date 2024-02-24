@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import TricountOverview from './Tricount/Overview';
+import FeicountOverview from './Feicount/Overview';
 import AddIcon from "@mui/icons-material/Add";
 import {Fab} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Currency } from '../types/Currency';
 import { Category } from '../types/Category';
 
-export interface TricountData {
+export interface FeicountData {
     id: number;
     title: string;
     description?: string;
@@ -18,41 +18,41 @@ export interface TricountData {
 }
 
 export default function Home() {
-    const [tricounts, setTricounts] = useState<TricountData[]>([]);
+    const [feicounts, setFeicounts] = useState<FeicountData[]>([]);
     const navigate = useNavigate();
     
     useEffect(() => {
-        fetchTricounts();
+        fetchFeicounts();
     }, []);
 
-    const fetchTricounts = async () => {
+    const fetchFeicounts = async () => {
         try {
-            const tricountRepsonse: Response = await fetch('/api/Tricount');
-            if (!tricountRepsonse.ok) {
-                throw new Error('Failed to fetch tricounts');
+            const feicountRepsonse: Response = await fetch('/api/Feicount');
+            if (!feicountRepsonse.ok) {
+                throw new Error('Failed to fetch feicounts');
             }
             
-            const tricountData: TricountData[] = await tricountRepsonse.json();
-            setTricounts(tricountData);
+            const feicountData: FeicountData[] = await feicountRepsonse.json();
+            setFeicounts(feicountData);
         } catch (error) {
-            console.error('Error fetching tricounts:', error);
+            console.error('Error fetching feicounts:', error);
         }
     };
     
-    const addTricount = async () => {
-        navigate('/tricount/new');
+    const addFeicount = async () => {
+        navigate('/feicount/new');
     }
 
     return (
         <>
-            {tricounts.map((tricount) => (
-                <div key={tricount.id}>
-                    <TricountOverview id={tricount.id.toString()} title={tricount.title}
-                                      description={tricount.description ? tricount.description : ''}/>
+            {feicounts.map((feicount) => (
+                <div key={feicount.id}>
+                    <FeicountOverview id={feicount.id.toString()} title={feicount.title}
+                                      description={feicount.description ? feicount.description : ''}/>
                 </div>
             ))}
             <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-                <Fab color="primary" aria-label="add" onClick={addTricount}>
+                <Fab color="primary" aria-label="add" onClick={addFeicount}>
                     <AddIcon/>
                 </Fab>
             </div>

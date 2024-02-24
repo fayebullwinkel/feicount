@@ -1,4 +1,4 @@
-namespace tricount.Controllers.Types;
+namespace feicount.Controllers.Types;
 
 public class ExpenseDto
 {

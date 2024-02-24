@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using tricount.Models;
+using feicount.Models;
 
-namespace tricount.Data;
+namespace feicount.Data;
 
 public interface IExpenseRepository
 {
     public List<Expense> FindAll();
     public Expense? FindById(int id);
-    public List<Expense> FindForTricount(int tricountId);
+    public List<Expense> FindForFeicount(int feicountId);
     public void Delete(int expenseId);
     public void Create(Expense expense);
 }
@@ -24,7 +24,7 @@ public class ExpenseRepository : IExpenseRepository
     public List<Expense> FindAll()
     {
         return _ctx.Expenses
-            .Include(e => e.Tricount)
+            .Include(e => e.Feicount)
             .Include(e => e.Spender)
             .Include(e => e.Recipients)
             .ToList();
@@ -33,19 +33,19 @@ public class ExpenseRepository : IExpenseRepository
     public Expense? FindById(int id)
     {
         return _ctx.Expenses
-            .Include(e => e.Tricount)
+            .Include(e => e.Feicount)
             .Include(e => e.Spender)
             .Include(e => e.Recipients)
             .FirstOrDefault(e => e.Id == id);
     }
 
-    public List<Expense> FindForTricount(int tricountId)
+    public List<Expense> FindForFeicount(int feicountId)
     {
         return _ctx.Expenses
-            .Include(e => e.Tricount)
+            .Include(e => e.Feicount)
             .Include(e => e.Spender)
             .Include(e => e.Recipients)
-            .Where(e => e.Tricount.Id == tricountId).ToList();
+            .Where(e => e.Feicount.Id == feicountId).ToList();
     }
 
     public void Create(Expense expense)

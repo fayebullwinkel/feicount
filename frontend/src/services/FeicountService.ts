@@ -14,30 +14,30 @@ export interface UserData {
     id: number,
     firstName: string,
     lastName: string,
-    tricountIds?: number[];
+    feicountIds?: number[];
     expenseIds?: number[];
     checked?: boolean;
 }
-const BASE_URL = '/api/Tricount';
+const BASE_URL = '/api/Feicount';
 
-const TricountService = {
-    fetchUsers: async (tricountId: string): Promise<UserData[]> => {
+const FeicountService = {
+    fetchUsers: async (feicountId: string): Promise<UserData[]> => {
         try {
-            const response = await fetch(`${BASE_URL}/${tricountId}/Users`);
+            const response = await fetch(`${BASE_URL}/${feicountId}/Users`);
             if (!response.ok) {
-                throw new Error('Failed to fetch Tricount users');
+                throw new Error('Failed to fetch Feicount users');
             }
 
             return response.json();
         } catch (error) {
-            console.error('TricountService - fetchUsers:', error);
+            console.error('FeicountService - fetchUsers:', error);
             throw error;
         }
     },
 
-    createExpense: async (tricountId: number, expenseData: ExpenseData): Promise<any> => {
+    createExpense: async (feicountId: number, expenseData: ExpenseData): Promise<void> => {
         try {
-            const response = await fetch(`${BASE_URL}/${tricountId}/Expenses`, {
+            const response = await fetch(`${BASE_URL}/${feicountId}/Expenses`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,15 +46,13 @@ const TricountService = {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to create Tricount expense');
+                throw new Error('Failed to create Feicount expense');
             }
-
-            return response.json();
         } catch (error) {
-            console.error('TricountService - createExpense:', error);
+            console.error('feicountService - createExpense:', error);
             throw error;
         }
     },
 };
 
-export default TricountService;
+export default FeicountService;

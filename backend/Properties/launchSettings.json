@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "tricount": {
+    "feicount": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:7257;http://localhost:5131",

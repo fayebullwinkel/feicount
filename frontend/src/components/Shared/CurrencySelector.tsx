@@ -1,20 +1,18 @@
 import {MenuItem, TextField} from "@mui/material";
 import { Currency } from "../../types/Currency";
+import React from "react";
 
 interface CurrencySelectorProps {
     currency: string;
     setCurrency: React.Dispatch<React.SetStateAction<string>>;
-    handleSelectChange: <T extends string | number>(
-        event: React.ChangeEvent<{ value: unknown }>,
-        setSpenderUserId: React.Dispatch<React.SetStateAction<T>>,
-    ) => void;
 }
 
-export default function CurrencySelector({ currency, setCurrency, handleSelectChange }: CurrencySelectorProps) {
+export default function CurrencySelector({ currency, setCurrency }: CurrencySelectorProps) {
+    
     return (
         <TextField
             label="Währung"
-            onChange={(event) => handleSelectChange(event, setCurrency)}
+            onChange={(event) => setCurrency(event.target.value)}
             required
             variant="outlined"
             color="secondary"

@@ -2,9 +2,9 @@ import React, { ReactNode } from 'react';
 import { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import Home from './components/Home';
-import NewTricount from './components/Tricount/New';
+import NewFeicount from './components/Feicount/New';
 import NewExpense from './components/Expense/New';
-import Tricount from './components/Tricount/Home';
+import Feicount from './components/Feicount/Home';
 
 interface AppRoute {
   index?: boolean;
@@ -12,9 +12,9 @@ interface AppRoute {
   element: ReactElement | JSX.Element;
 }
 
-const TricountWrapper = () => {
+const FeicountWrapper = () => {
   const { id } = useParams();
-  return <Tricount id={id!} />;
+  return <Feicount id={id!} />;
 };
 
 const AppRoutes: AppRoute[] = [
@@ -23,15 +23,15 @@ const AppRoutes: AppRoute[] = [
     element: <Home />
   },
   {
-    path: '/tricount/:id',
-    element: <TricountWrapper />
+    path: '/feicount/:id',
+    element: <FeicountWrapper />
   },
   {
-    path: '/tricount/new',
-    element: <NewTricount />
+    path: '/feicount/new',
+    element: <NewFeicount />
   },
   {
-    path: '/tricount/:id/expenses/new',
+    path: '/feicount/:id/expenses/new',
     element: <NewExpense />
   }
 ];

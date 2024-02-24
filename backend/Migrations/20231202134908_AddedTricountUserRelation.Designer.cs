@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using tricount.Data;
+using feicount.Data;
 
 #nullable disable
 
-namespace tricount.Migrations
+namespace feicount.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20231202134908_AddedTricountUserRelation")]
-    partial class AddedTricountUserRelation
+    [Migration("20231202134908_AddedFeicountUserRelation")]
+    partial class AddedFeicountUserRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,22 +24,22 @@ namespace tricount.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("TricountUser", b =>
+            modelBuilder.Entity("FeicountUser", b =>
                 {
-                    b.Property<int>("TricountsId")
+                    b.Property<int>("FeicountsId")
                         .HasColumnType("integer");
 
                     b.Property<int>("UsersId")
                         .HasColumnType("integer");
 
-                    b.HasKey("TricountsId", "UsersId");
+                    b.HasKey("FeicountsId", "UsersId");
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("TricountUser");
+                    b.ToTable("FeicountUser");
                 });
 
-            modelBuilder.Entity("tricount.Models.Tricount", b =>
+            modelBuilder.Entity("feicount.Models.Feicount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -62,10 +62,10 @@ namespace tricount.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tricounts");
+                    b.ToTable("Feicounts");
                 });
 
-            modelBuilder.Entity("tricount.Models.User", b =>
+            modelBuilder.Entity("feicount.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -86,15 +86,15 @@ namespace tricount.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("TricountUser", b =>
+            modelBuilder.Entity("FeicountUser", b =>
                 {
-                    b.HasOne("tricount.Models.Tricount", null)
+                    b.HasOne("feicount.Models.Feicount", null)
                         .WithMany()
-                        .HasForeignKey("TricountsId")
+                        .HasForeignKey("FeicountsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("tricount.Models.User", null)
+                    b.HasOne("feicount.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)

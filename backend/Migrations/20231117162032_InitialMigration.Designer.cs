@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using tricount.Data;
+using feicount.Data;
 
 #nullable disable
 
-namespace tricount.Migrations
+namespace feicount.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
     [Migration("20231117162032_InitialMigration")]
@@ -24,7 +24,7 @@ namespace tricount.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("tricount.Models.User", b =>
+            modelBuilder.Entity("feicount.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

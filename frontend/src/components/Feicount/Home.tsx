@@ -66,11 +66,11 @@ function a11yProps(index: number) {
     };
 }
 
-interface TricountProps {
+interface FeicountProps {
     id: string;
 }
 
-const Tricount: React.FC<TricountProps> = ({ id }) => {
+const Feicount: React.FC<FeicountProps> = ({ id }) => {
     const [value, setValue] = useState(0);
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [spender, setSpender] = useState<Spender[]>([]);
@@ -79,7 +79,7 @@ const Tricount: React.FC<TricountProps> = ({ id }) => {
     useEffect(() => {
         const fetchTriountOverviewData = async () => {
             try {
-                const expenseResponse = await fetch(`/api/Tricount/${id}/Expenses`);
+                const expenseResponse = await fetch(`/api/Feicount/${id}/Expenses`);
                 if (!expenseResponse.ok) {
                     throw new Error('Failed to fetch expenses');
                 }
@@ -105,7 +105,7 @@ const Tricount: React.FC<TricountProps> = ({ id }) => {
     };
 
     function addExpense() {
-        navigate(`/tricount/${id}/expenses/new`);
+        navigate(`/feicount/${id}/expenses/new`);
     }
 
     return (
@@ -151,4 +151,4 @@ const Tricount: React.FC<TricountProps> = ({ id }) => {
     );
 };
 
-export default Tricount;
+export default Feicount;

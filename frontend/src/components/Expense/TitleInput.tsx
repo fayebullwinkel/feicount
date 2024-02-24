@@ -1,13 +1,12 @@
-import {MenuItem, TextField} from "@mui/material";
-import { Currency } from "../../types/Currency";
+import { TextField } from "@mui/material";
 import React from "react";
 
-interface TitleSelectorProps {
+interface TitleInputProps {
     title: string;
     setTitle: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function TitleSelector({ title, setTitle }: TitleSelectorProps) {
+export default function TitleInput({ title, setTitle }: TitleInputProps) {
     return (
         <TextField
             label="Titel"

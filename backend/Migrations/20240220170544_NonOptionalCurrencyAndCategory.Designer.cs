@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using tricount.Data;
+using feicount.Data;
 
 #nullable disable
 
-namespace tricount.Migrations
+namespace feicount.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
     [Migration("20240220170544_NonOptionalCurrencyAndCategory")]
@@ -40,22 +40,22 @@ namespace tricount.Migrations
                     b.ToTable("ExpenseUser");
                 });
 
-            modelBuilder.Entity("TricountUser", b =>
+            modelBuilder.Entity("FeicountUser", b =>
                 {
-                    b.Property<int>("TricountsId")
+                    b.Property<int>("FeicountsId")
                         .HasColumnType("integer");
 
                     b.Property<int>("UsersId")
                         .HasColumnType("integer");
 
-                    b.HasKey("TricountsId", "UsersId");
+                    b.HasKey("FeicountsId", "UsersId");
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("TricountUser");
+                    b.ToTable("FeicountUser");
                 });
 
-            modelBuilder.Entity("tricount.Models.Expense", b =>
+            modelBuilder.Entity("feicount.Models.Expense", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -76,19 +76,19 @@ namespace tricount.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("TricountId")
+                    b.Property<int>("FeicountId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
 
                     b.HasIndex("SpenderId");
 
-                    b.HasIndex("TricountId");
+                    b.HasIndex("FeicountId");
 
                     b.ToTable("Expenses");
                 });
 
-            modelBuilder.Entity("tricount.Models.Tricount", b =>
+            modelBuilder.Entity("feicount.Models.Feicount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -111,10 +111,10 @@ namespace tricount.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tricounts");
+                    b.ToTable("Feicounts");
                 });
 
-            modelBuilder.Entity("tricount.Models.User", b =>
+            modelBuilder.Entity("feicount.Models.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -136,54 +136,54 @@ namespace tricount.Migrations
 
             modelBuilder.Entity("ExpenseUser", b =>
                 {
-                    b.HasOne("tricount.Models.Expense", null)
+                    b.HasOne("feicount.Models.Expense", null)
                         .WithMany()
                         .HasForeignKey("ExpensesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("tricount.Models.User", null)
+                    b.HasOne("feicount.Models.User", null)
                         .WithMany()
                         .HasForeignKey("RecipientsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TricountUser", b =>
+            modelBuilder.Entity("FeicountUser", b =>
                 {
-                    b.HasOne("tricount.Models.Tricount", null)
+                    b.HasOne("feicount.Models.Feicount", null)
                         .WithMany()
-                        .HasForeignKey("TricountsId")
+                        .HasForeignKey("FeicountsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("tricount.Models.User", null)
+                    b.HasOne("feicount.Models.User", null)
                         .WithMany()
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("tricount.Models.Expense", b =>
+            modelBuilder.Entity("feicount.Models.Expense", b =>
                 {
-                    b.HasOne("tricount.Models.User", "Spender")
+                    b.HasOne("feicount.Models.User", "Spender")
                         .WithMany()
                         .HasForeignKey("SpenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("tricount.Models.Tricount", "Tricount")
+                    b.HasOne("feicount.Models.Feicount", "Feicount")
                         .WithMany("Expenses")
-                        .HasForeignKey("TricountId")
+                        .HasForeignKey("FeicountId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Spender");
 
-                    b.Navigation("Tricount");
+                    b.Navigation("Feicount");
                 });
 
-            modelBuilder.Entity("tricount.Models.Tricount", b =>
+            modelBuilder.Entity("feicount.Models.Feicount", b =>
                 {
                     b.Navigation("Expenses");
                 });

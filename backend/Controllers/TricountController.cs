@@ -1,87 +1,87 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using tricount.Controllers.Mappers;
-using tricount.Controllers.Types;
-using tricount.Models;
-using tricount.Services;
+using feicount.Controllers.Mappers;
+using feicount.Controllers.Types;
+using feicount.Models;
+using feicount.Services;
 
-namespace tricount.Controllers;
+namespace feicount.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class TricountController: ControllerBase
+public class FeicountController: ControllerBase
 {
-    private readonly ITricountMapper _tricountMapper;
-    private readonly ITricountService _tricountService;
+    private readonly IFeicountMapper _feicountMapper;
+    private readonly IFeicountService _feicountService;
 
-    public TricountController(ITricountMapper tricountMapper, ITricountService tricountService)
+    public FeicountController(IFeicountMapper feicountMapper, IFeicountService feicountService)
     {
-        _tricountMapper = tricountMapper;
-        _tricountService = tricountService;
+        _feicountMapper = feicountMapper;
+        _feicountService = feicountService;
     }
 
     [HttpGet]
-    public List<TricountDto> GetAll()
+    public List<FeicountDto> GetAll()
     {
-        return _tricountService.FindAll().Select(tricount => _tricountMapper.ToTricountDto(tricount)).ToList();
+        return _feicountService.FindAll().Select(feicount => _feicountMapper.ToFeicountDto(feicount)).ToList();
     }
 
     [HttpGet("{id}/Transactions")]
-    public List<Transaction> GetTricountTransactions(int id)
+    public List<Transaction> GetFeicountTransactions(int id)
     {
-        return _tricountService.GetTricountTransactions(id);
+        return _feicountService.GetFeicountTransactions(id);
     }
 
     [HttpGet("{id}")]
-    public TricountDto GetById(int id)
+    public FeicountDto GetById(int id)
     {
-        return _tricountMapper.ToTricountDto(_tricountService.FindById(id));
+        return _feicountMapper.ToFeicountDto(_feicountService.FindById(id));
     }
 
     [HttpGet("{id}/Expenses")]
     public List<ExpenseDto> GetExpenses(int id)
     {
-        return _tricountService.GetTricountExpenses(id).Select(expense => _tricountMapper.ToExpenseDto(expense)).ToList();
+        return _feicountService.GetFeicountExpenses(id).Select(expense => _feicountMapper.ToExpenseDto(expense)).ToList();
     }
     
     [HttpGet("{id}/Users")]
     public List<UserDto> GetUsers(int id)
     {
-        return _tricountService.GetTricountUsers(id).Select(user => _tricountMapper.ToUserDto(user)).ToList();
+        return _feicountService.GetFeicountUsers(id).Select(user => _feicountMapper.ToUserDto(user)).ToList();
     }
     
     [HttpPost("{id}/Users/{userId}")]
     public void AddUser(int id, int userId)
     {
-        _tricountService.AddUserToTricount(id, userId);
+        _feicountService.AddUserToFeicount(id, userId);
     }
 
     [HttpPost]
-    public void Post([FromBody] TricountDto dto)
+    public void Post([FromBody] FeicountDto dto)
     {
-        _tricountService.CreateTricount(dto);
+        _feicountService.CreateFeicount(dto);
     }
 
     [HttpPost("{id}/Expenses")]
     public void AddExpense(int id, [FromBody] ExpenseDto dto)
     {
-        _tricountService.AddExpenseToTricount(id, dto);
+        _feicountService.AddExpenseToFeicount(id, dto);
     }
     
     [HttpDelete("{id}")]
     public void Delete(int id)
     {
-        _tricountService.Delete(id);
+        _feicountService.Delete(id);
     }
 
     [HttpDelete("{id}/Expenses/{expenseId}")]
     public void DeleteExpense(int expenseId)
     {
-        _tricountService.DeleteExpense(expenseId);
+        _feicountService.DeleteExpense(expenseId);
     }
 
     [HttpDelete("{id}/Users/{userId}")]
-    public void DeleteTricountUser(int id, int userId)
+    public void DeleteFeicountUser(int id, int userId)
     {
-        _tricountService.DeleteTricountUser(id, userId);
+        _feicountService.DeleteFeicountUser(id, userId);
     }
 }

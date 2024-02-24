@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace tricount.Migrations
+namespace feicount.Migrations
 {
     /// <inheritdoc />
     public partial class NonOptionalCurrencyAndCategory : Migration
@@ -12,7 +12,7 @@ namespace tricount.Migrations
         {
             migrationBuilder.AlterColumn<int>(
                 name: "Currency",
-                table: "Tricounts",
+                table: "Feicounts",
                 type: "integer",
                 nullable: false,
                 defaultValue: 0,
@@ -22,7 +22,7 @@ namespace tricount.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "Category",
-                table: "Tricounts",
+                table: "Feicounts",
                 type: "integer",
                 nullable: false,
                 defaultValue: 0,
@@ -36,7 +36,7 @@ namespace tricount.Migrations
         {
             migrationBuilder.AlterColumn<int>(
                 name: "Currency",
-                table: "Tricounts",
+                table: "Feicounts",
                 type: "integer",
                 nullable: true,
                 oldClrType: typeof(int),
@@ -44,7 +44,7 @@ namespace tricount.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "Category",
-                table: "Tricounts",
+                table: "Feicounts",
                 type: "integer",
                 nullable: true,
                 oldClrType: typeof(int),
