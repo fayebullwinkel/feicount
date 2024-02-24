@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import {TextField, Button, MenuItem, Box, List, ListItem, ListItemText} from "@mui/material";
-import {Currency} from "../types/Currency";
-import {Category} from "../types/Category";
+import {Currency, mapToCurrency} from "../types/Currency";
+import {Category, mapToCategory} from "../types/Category";
 import {TricountData} from "./Home";
 import {useNavigate} from "react-router-dom";
 
@@ -58,10 +58,6 @@ export default function NewTricount() {
         setEditIndex(null);
     };
 
-    const mapToEnum = (value: string, enumType: any) => {
-        return enumType[value];
-    };
-
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
@@ -81,11 +77,11 @@ export default function NewTricount() {
             id: 0,
             title,
             description,
-            currency: mapToEnum(currency, Currency),
-            category: mapToEnum(category, Category),
-            userIds: [],
+            currency: mapToCurrency(currency),
+            category: mapToCategory(category),
+            userIds: [], // TODO: fill with actual values
             userNames: postNames,
-            expenseIds: []
+            expenseIds: [] // TODO: fill with actual values
         };
 
         try {
@@ -114,14 +110,8 @@ export default function NewTricount() {
     return (
         <React.Fragment>
             <form autoComplete="off" onSubmit={handleSubmit}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
-                    <Button variant="outlined" color="error" onClick={goToHome}>
-                        Abbrechen
-                    </Button>
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
                     <h2>Neuer Tricount</h2>
-                    <Button variant="outlined" color="secondary" type="submit">
-                        Sichern
-                    </Button>
                 </div>
                 <TextField
                     label="Titel"
@@ -146,7 +136,7 @@ export default function NewTricount() {
                     sx={{mb: 3}}
                 />
                 <TextField
-                    label="Currency"
+                    label="Währung"
                     onChange={(event) => handleSelectChange(event, setCurrency)}
                     required
                     variant="outlined"
@@ -166,7 +156,7 @@ export default function NewTricount() {
                         ))}
                 </TextField>
                 <TextField
-                    label="Category"
+                    label="Kategorie"
                     onChange={(event) => handleSelectChange(event, setCategory)}
                     required
                     variant="outlined"
@@ -192,7 +182,7 @@ export default function NewTricount() {
                             value={currentUser}
                             onChange={(e) => handleInputChange(e.target.value)}
                             fullWidth
-                            sx={{ marginRight: '8px' }} // Adjust the margin as needed
+                            sx={{ marginRight: '8px' }}
                         />
                         <Button variant="outlined" color="primary" onClick={handleSaveInput}>
                             {editIndex !== null ? 'Speichern' : 'Hinzufügen'}
@@ -215,6 +205,14 @@ export default function NewTricount() {
                             ))}
                         </List>
                     )}
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
+                    <Button variant="outlined" color="error" onClick={goToHome}>
+                        Abbrechen
+                    </Button>
+                    <Button variant="outlined" color="secondary" type="submit">
+                        Sichern
+                    </Button>
                 </div>
             </form>
         </React.Fragment>

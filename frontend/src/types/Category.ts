@@ -7,3 +7,13 @@ export enum Category {
     Freundesgruppe = 5,
     Sonstige = 6
 }
+
+export const mapToCategory = (value: string): Category => {
+    const currencyKey = value as keyof typeof Category;
+
+    if (currencyKey in Category) {
+        return Category[currencyKey];
+    } else {
+        throw new Error(`Invalid currency value: ${value}`);
+    }
+};

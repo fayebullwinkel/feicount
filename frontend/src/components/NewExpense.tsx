@@ -1,12 +1,14 @@
 import React, {useEffect, useState} from "react";
-import {TextField, Button, MenuItem, FormControlLabel, Checkbox} from "@mui/material";
+import {TextField, Button, MenuItem, FormControlLabel, Checkbox, Grid} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Currency, mapToCurrency } from "../types/Currency";
 
 interface ExpenseData {
     id: number;
     title: string;
     amount: number;
+    currency: Currency;
     date: Date;
     spenderUserId: number;
     recipientIds: number[];
@@ -30,17 +32,31 @@ export default function NewExpense() {
     const [recipientIds, setRecipientIds] = useState([0]);
     const [amountError, setAmountError] = useState(false);
     const [users, setUsers] = useState<UserData[]>([]);
+    const [currency, setCurrency] = useState(Currency[Currency.EUR]);
+    const [userShares, setUserShares] = useState<Record<number, number>>({});
     const navigate = useNavigate();
-    const handleSelectChange = (
+    
+    const handleSelectChange = <T extends string | number>(
         event: React.ChangeEvent<{ value: unknown }>,
-        setSpenderUserId: React.Dispatch<React.SetStateAction<number>>,
+        setSpenderUserId: React.Dispatch<React.SetStateAction<T>>,
     ) => {
-        setSpenderUserId(event.target.value as number);
+        setSpenderUserId(event.target.value as T);
     };
 
-    useEffect(() => {
-        fetchTricountUsers();
-    }, []);
+    const updateShares = () => { // TODO: Update logic to have recipient pay less if it does not add up correctly
+        const checkedUsers = users.filter((user) => user.checked);
+        const totalCheckedUsers = checkedUsers.length;
+
+        if (totalCheckedUsers === 0) return;
+
+        const share = amount / totalCheckedUsers;
+        const newShares: Record<number, number> = {};
+        checkedUsers.forEach((user) => {
+            newShares[user.id] = share;
+        });
+
+        setUserShares(newShares);
+    };
 
     const fetchTricountUsers = async () => {
         try {
@@ -62,7 +78,15 @@ export default function NewExpense() {
             console.error('Error fetching users:', error);
         }
     };
-    
+
+    useEffect(() => {
+        fetchTricountUsers();
+    }, [amount]);
+
+    useEffect(() => {
+        updateShares();
+    }, [users]);
+
     const handleChangeUser = (userId: number) => (event: { target: { checked: boolean; }; }) => {
         setUsers(prevUsers => prevUsers.map((user) =>
             user.id === userId ? { ...user, checked: event.target.checked } : user
@@ -99,6 +123,7 @@ export default function NewExpense() {
             id: 0,
             title,
             amount,
+            currency: mapToCurrency(currency),
             date,
             spenderUserId: spenderUserId,
             recipientIds
@@ -130,14 +155,8 @@ export default function NewExpense() {
     return (
         <React.Fragment>
             <form autoComplete="off" onSubmit={handleSubmit}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
-                    <Button variant="outlined" color="error" onClick={goBackToTricount}>
-                        Abbrechen
-                    </Button>
+                <div style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
                     <h2>Neue Ausgabe</h2>
-                    <Button variant="outlined" color="secondary" type="submit">
-                        Sichern
-                    </Button>
                 </div>
                 <TextField
                     label="Titel"
@@ -149,18 +168,46 @@ export default function NewExpense() {
                     fullWidth
                     value={title}
                 />
-                <TextField
-                    label="Betrag"
-                    onChange={e => setAmount(Number(e.target.value))}
-                    required
-                    variant="outlined"
-                    color="secondary"
-                    type="amount"
-                    value={amount} // TODO do calculation between cents and euros
-                    fullWidth
-                    sx={{mb: 3}}
-                    error={amountError}
-                />
+                <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                        <TextField
+                            label="Betrag"
+                            onChange={(e) => {
+                                setAmount(Number(e.target.value));
+                            }}
+                            required
+                            variant="outlined"
+                            color="secondary"
+                            type="amount"
+                            value={amount}
+                            fullWidth
+                            sx={{ mb: 3 }}
+                            error={amountError}
+                        />
+                    </Grid>
+                    <Grid item xs={4}>
+                        <TextField
+                            label="Währung"
+                            onChange={(event) => handleSelectChange(event, setCurrency)}
+                            required
+                            variant="outlined"
+                            color="secondary"
+                            type="currency"
+                            value={currency}
+                            select
+                            fullWidth
+                            sx={{ mb: 3 }}
+                        >
+                            {Object.values(Currency)
+                                .filter((value) => typeof value === 'string')
+                                .map((currencyKey) => (
+                                    <MenuItem key={currencyKey} value={currencyKey}>
+                                        {currencyKey}
+                                    </MenuItem>
+                                ))}
+                        </TextField>
+                    </Grid>
+                </Grid>
                 <TextField
                     label="Datum"
                     onChange={(e) => setDate(new Date(e.target.value))}
@@ -200,16 +247,29 @@ export default function NewExpense() {
                     <div style={{ backgroundColor: 'lightgrey', padding: '10px' }}>
                         <FormControlLabel label="Für wen" control={<Checkbox {...parentCheckboxProps} />} />
                     </div>
-                    <div style={{padding: '10px' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', padding: '10px' }}>
                         {users.map((user) => (
-                            <div key={user.id}>
-                                <FormControlLabel
-                                    label={`${user.firstName} ${user.lastName}`}
-                                    control={<Checkbox checked={user.checked} onChange={handleChangeUser(user.id)} />}
-                                />
+                            <div key={user.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <div>
+                                    <FormControlLabel
+                                        label={`${user.firstName} ${user.lastName}`}
+                                        control={<Checkbox checked={user.checked} onChange={handleChangeUser(user.id)} />}
+                                    />
+                                </div>
+                                <div>
+                                    {userShares[user.id]?.toFixed(2).replace('.', ',') || '0,00'} {currency}
+                                </div>
                             </div>
                         ))}
                     </div>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
+                    <Button variant="outlined" color="error" onClick={goBackToTricount}>
+                        Abbrechen
+                    </Button>
+                    <Button variant="outlined" color="secondary" type="submit">
+                        Sichern
+                    </Button>
                 </div>
             </form>
         </React.Fragment>
