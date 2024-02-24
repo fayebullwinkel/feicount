@@ -1,8 +1,8 @@
 import React, {useState} from "react";
 import {TextField, Button, MenuItem, Box, List, ListItem, ListItemText} from "@mui/material";
-import {Currency, mapToCurrency} from "../types/Currency";
-import {Category, mapToCategory} from "../types/Category";
-import {TricountData} from "./Home";
+import {Currency, mapToCurrency} from "../../types/Currency";
+import {Category, mapToCategory} from "../../types/Category";
+import {TricountData} from "../Home";
 import {useNavigate} from "react-router-dom";
 
 export default function NewTricount() {

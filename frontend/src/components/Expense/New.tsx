@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {TextField, Button, MenuItem, FormControlLabel, Checkbox, Grid} from "@mui/material";
 import {useNavigate, useParams} from "react-router-dom";
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { Currency, mapToCurrency } from "../types/Currency";
+import { Currency, mapToCurrency } from "../../types/Currency";
 
 interface ExpenseData {
     id: number;

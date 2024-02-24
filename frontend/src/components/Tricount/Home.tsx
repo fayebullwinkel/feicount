@@ -3,10 +3,10 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
-import { Cost, Transfer } from "./Icons";
+import { Cost, Transfer } from "../Icons";
 import { Fab } from "@mui/material";
 import { useEffect, useState } from "react";
-import ExpenseOverview from "./ExpenseOverview";
+import ExpenseOverview from "../Expense/Overview";
 import {useNavigate, useParams} from "react-router-dom";
 
 interface TabPanelProps {

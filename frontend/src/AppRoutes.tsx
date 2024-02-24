@@ -1,11 +1,10 @@
 import React, { ReactNode } from 'react';
 import { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
-import { Counter } from './components/Counter';
 import Home from './components/Home';
-import NewTricount from './components/NewTricount';
-import NewExpense from './components/NewExpense';
-import Tricount from './components/Tricount';
+import NewTricount from './components/Tricount/New';
+import NewExpense from './components/Expense/New';
+import Tricount from './components/Tricount/Home';
 
 interface AppRoute {
   index?: boolean;
@@ -22,10 +21,6 @@ const AppRoutes: AppRoute[] = [
   {
     index: true,
     element: <Home />
-  },
-  {
-    path: '/counter',
-    element: <Counter />
   },
   {
     path: '/tricount/:id',

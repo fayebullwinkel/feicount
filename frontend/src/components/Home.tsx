@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import TricountOverview from './TricountOverview';
+import TricountOverview from './Tricount/Overview';
 import AddIcon from "@mui/icons-material/Add";
 import {Fab} from "@mui/material";
 import { useNavigate } from "react-router-dom";
