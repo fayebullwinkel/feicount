@@ -37,7 +37,7 @@ export default function NewExpense() {
 
         if (totalCheckedUsers === 0) return;
 
-        const share = amount / totalCheckedUsers;
+        const share = amount / 100 / totalCheckedUsers;
         const newShares: Record<number, number> = {};
         checkedUsers.forEach((user) => {
             newShares[user.id] = share;
