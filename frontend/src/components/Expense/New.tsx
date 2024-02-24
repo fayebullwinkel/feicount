@@ -21,7 +21,6 @@ export default function NewExpense() {
     const [amountError, setAmountError] = useState(false);
     const [users, setUsers] = useState<UserData[]>([]);
     const [currency, setCurrency] = useState(Currency[Currency.EUR]);
-    const [userShares, setUserShares] = useState<Record<number, number>>({});
     const navigate = useNavigate();
 
     const handleSelectChange = <T extends string | number>(
@@ -29,21 +28,6 @@ export default function NewExpense() {
         setSpenderUserId: React.Dispatch<React.SetStateAction<T>>,
     ) => {
         setSpenderUserId(event.target.value as T);
-    };
-
-    const updateShares = () => { // TODO: Update logic to have recipient pay less if it does not add up correctly
-        const checkedUsers = users.filter((user) => user.checked);
-        const totalCheckedUsers = checkedUsers.length;
-
-        if (totalCheckedUsers === 0) return;
-
-        const share = amount / 100 / totalCheckedUsers;
-        const newShares: Record<number, number> = {};
-        checkedUsers.forEach((user) => {
-            newShares[user.id] = share;
-        });
-
-        setUserShares(newShares);
     };
 
     const fetchTricountUsers = async () => {
@@ -69,10 +53,6 @@ export default function NewExpense() {
     useEffect(() => {
         fetchTricountUsers();
     }, [amount]);
-
-    useEffect(() => {
-        updateShares();
-    }, [users]);
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -127,7 +107,7 @@ export default function NewExpense() {
                 <DateSelector selectedDate={date} setDate={setDate}/>
                 <SpenderSelector users={users} spenderUserId={spenderUserId} setSpenderUserId={setSpenderUserId}
                                  handleSelectChange={handleSelectChange}/>
-                <RecipientsSelector users={users} userShares={userShares} setUsers={setUsers} currency={currency}/>
+                <RecipientsSelector users={users} setUsers={setUsers} currency={currency} amount={amount}/>
                 <FormActions prevPage={`/tricount/${id}`} navigate={navigate}/>
             </form>
         </React.Fragment>

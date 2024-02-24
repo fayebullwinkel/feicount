@@ -1,20 +1,17 @@
 import {Checkbox, FormControlLabel, TextField} from "@mui/material";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {UserData} from "../../services/TricountService";
 
 interface RecipientsSelectorProps {
     users: UserData[];
-    userShares: Record<number, number>;
     setUsers: React.Dispatch<React.SetStateAction<UserData[]>>;
     currency: string;
+    amount: number;
 }
 
-const RecipientsSelector = ({
-                                users,
-                                userShares,
-                                setUsers,
-                                currency,
-                            }: RecipientsSelectorProps) => {
+const RecipientsSelector = ({ users, setUsers, currency, amount }: RecipientsSelectorProps) => {
+    const [userShares, setUserShares] = useState<Record<number, number>>({});
+
     const parentCheckboxProps = {
         checked: users.every((user) => user.checked),
         indeterminate:
@@ -39,6 +36,25 @@ const RecipientsSelector = ({
             )
         );
     };
+
+    const updateShares = () => { // TODO: Update logic to have recipient pay less if it does not add up correctly
+        const checkedUsers: UserData[] = users.filter((user) => user.checked);
+        const totalCheckedUsers = checkedUsers.length;
+
+        if (totalCheckedUsers === 0) return;
+
+        const share = amount / 100 / totalCheckedUsers;
+        const newShares: Record<number, number> = {};
+        checkedUsers.forEach((user) => {
+            newShares[user.id] = share;
+        });
+
+        setUserShares(newShares);
+    };
+
+    useEffect(() => {
+        updateShares();
+    }, [users]);
 
     return (
         <div>
