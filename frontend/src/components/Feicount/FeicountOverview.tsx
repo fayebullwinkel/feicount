@@ -10,7 +10,7 @@ interface FeicountOverviewProps {
     description: string;
 }
 
-export default function Overview({id, title, description}: FeicountOverviewProps) {
+export default function FeicountOverview({id, title, description}: FeicountOverviewProps) {
     const navigate: NavigateFunction = useNavigate();
 
     const goToFeicount = () => {

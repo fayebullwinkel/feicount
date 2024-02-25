@@ -2,9 +2,10 @@ import React from 'react';
 import { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import Home from './components/Home';
-import NewFeicount from './components/Feicount/New';
-import NewExpense from './components/Expense/New';
-import Feicount from './components/Feicount/Home';
+import NewFeicount from './components/Feicount/NewFeicount';
+import NewExpense from './components/Expense/NewExpense';
+import Feicount from './components/Feicount/Feicount';
+import Overview from './components/Transaction/TransactionOverview';
 
 interface AppRoute {
   index?: boolean;

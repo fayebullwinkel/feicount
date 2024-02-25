@@ -7,35 +7,16 @@ import {
     TableRow,
     Paper
 } from '@mui/material';
+import { User } from '../Feicount/Feicount';
 
 interface BalanceTableProps {
     tricountId: number;
-}
-
-interface User {
-    id: number, 
-    firstName: string,
-    lastName: string,
-    expenseIds: number[]
+    users: User[];
 }
 
 interface Balance {
     userId: number,
     amount: number
-}
-
-const getTricountUsers = async (feicountId: number, setUsers: React.Dispatch<React.SetStateAction<User[]>>) => {
-    try {
-        const usersResponse: Response = await fetch(`/api/Feicount/${feicountId}/Users`);
-        if (!usersResponse.ok) {
-            throw new Error(`Failed to fetch users for feicount ${feicountId}`);
-        }
-
-        const usersData: User[] = await usersResponse.json();
-        setUsers((prevUsers) => [...prevUsers, ...usersData]);
-    } catch (error) {
-        console.error('Error fetching feicount users:', error);
-    }
 }
 
 const getUserBalances = async (tricountId: number, users: User[], setUserBalances: React.Dispatch<React.SetStateAction<Balance[]>>) => {
@@ -63,18 +44,8 @@ const userBalance: Balance | undefined = userBalances.find((balance) => balance.
     return userBalance && userBalance.amount < 0 ? '#f2a593' : '#9fd6a5';
 };
 
-export default function BalanceTable({ tricountId }: BalanceTableProps) {
+export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
     const [userBalances, setUserBalances] = useState<Balance[]>([]);
-    const [users, setUsers] = useState<User[]>([]);
-
-    useEffect(() => {
-        try {
-            setUsers([]);
-            getTricountUsers(tricountId, setUsers);
-        } catch (error) {
-            console.error('Error fetching users:', error);
-        }
-    }, [tricountId]);
 
     useEffect(() => {
         if (users.length > 0) {

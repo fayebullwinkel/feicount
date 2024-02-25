@@ -6,8 +6,8 @@ import Box from '@mui/material/Box';
 import { Cost, Transfer } from "../Icons";
 import { Button, Fab } from "@mui/material";
 import { useEffect, useState } from "react";
-import ExpenseOverview from "../Expense/Overview";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import ExpenseOverview from "../Expense/ExpenseOverview";
+import { useNavigate } from "react-router-dom";
 import BalanceTable from '../Balance/BalanceTable';
 
 interface TabPanelProps {
@@ -30,6 +30,13 @@ interface Spender {
     id: number;
     firstName: string;
     lastName: string;
+}
+
+export interface User {
+    id: number,
+    firstName: string,
+    lastName: string,
+    expenseIds: number[]
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -60,16 +67,26 @@ function CustomTabPanel(props: TabPanelProps) {
     );
 }
 
+const getTricountUsers = async (feicountId: number, setUsers: React.Dispatch<React.SetStateAction<User[]>>) => {
+    try {
+        const usersResponse: Response = await fetch(`/api/Feicount/${feicountId}/Users`);
+        if (!usersResponse.ok) {
+            throw new Error(`Failed to fetch users for feicount ${feicountId}`);
+        }
+
+        const usersData: User[] = await usersResponse.json();
+        setUsers((prevUsers) => [...prevUsers, ...usersData]);
+    } catch (error) {
+        console.error('Error fetching feicount users:', error);
+    }
+}
+
 function a11yProps(index: number) {
     return {
         id: `simple-tab-${index}`,
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
-
-const goBack = (prevPage: string, navigate: NavigateFunction) => {
-    navigate(prevPage);
-};
 
 interface FeicountProps {
     id: string;
@@ -79,7 +96,17 @@ export default function Feicount({ id }: FeicountProps) {
     const [value, setValue] = useState(0);
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [spender, setSpender] = useState<Spender[]>([]);
+    const [users, setUsers] = useState<User[]>([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        try {
+            setUsers([]);
+            getTricountUsers(Number(id), setUsers);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    }, [Number(id)]);
     
     useEffect(() => {
         const fetchTriountOverviewData = async () => {
@@ -150,16 +177,16 @@ export default function Feicount({ id }: FeicountProps) {
             </CustomTabPanel>
 
             <CustomTabPanel value={value} index={1} className="center">
-                <BalanceTable tricountId={Number(id)}/>
+                <BalanceTable tricountId={Number(id)} users={users}/>
             </CustomTabPanel>
 
 
             <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
-                <Button variant="outlined" color="error" onClick={() => goBack('/', navigate)}>
+                <Button variant="outlined" color="error" onClick={() => navigate("/")}>
                     Zurück
                 </Button>
                 {value === 1 && (
-                    <Button variant="outlined" color="secondary" type="submit">
+                    <Button variant="outlined" color="secondary" onClick={() => navigate(`/feicount/${id}/transactions`, { state: { users } })}>
                         Zur Abrechnung
                     </Button>
                 )}
