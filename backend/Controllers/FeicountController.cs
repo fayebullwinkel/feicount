@@ -55,6 +55,12 @@ public class FeicountController: ControllerBase
         _feicountService.AddUserToFeicount(id, userId);
     }
 
+    [HttpGet("{id}/Users/{userId}/balance")]
+    public UserBalance GetUserBalance(int id, int userId)
+    {
+        return _feicountService.GetUserBalance(id, userId);
+    }
+    
     [HttpPost]
     public void Post([FromBody] FeicountDto dto)
     {

@@ -10,18 +10,22 @@ public class Feicount
     public List<User> Users { get; set; } = new();
     public List<Expense> Expenses { get; set; } = new();
 
+    public UserBalance CalculateUserBalance(User user)
+    {
+        var totalSpent = Expenses.Where(e => e.Spender.Id == user.Id).Sum(e => e.Amount);
+        var totalReceived = Expenses
+            .Where(e => e.Recipients.Contains(user))
+            .Sum(e => e.Amount / e.Recipients.Count);
+        return new UserBalance(userId: user.Id, amount: totalSpent - totalReceived);
+    }
+    
     public List<Transaction> CalculateTransactions()
     {
         List<Transaction> transactions = new List<Transaction>();
 
         foreach (var user in Users)
         {
-            var totalSpent = Expenses.Where(e => e.Spender.Id == user.Id).Sum(e => e.Amount);
-            var totalReceived = Expenses
-                .Where(e => e.Recipients.Contains(user))
-                .Sum(e => e.Amount / e.Recipients.Count);
-            var totalAmount = totalSpent - totalReceived;
-
+            var totalAmount = CalculateUserBalance(user).Amount;
             switch (totalAmount)
             {
                 case > 0:
