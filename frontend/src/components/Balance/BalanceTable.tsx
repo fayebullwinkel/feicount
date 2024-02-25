@@ -4,7 +4,6 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableHead,
     TableRow,
     Paper
 } from '@mui/material';
@@ -61,7 +60,7 @@ const getUserBalances = async (tricountId: number, users: User[], setUserBalance
 
 const getUserBalanceColor = (userId: number, userBalances: Balance[]) => {
 const userBalance: Balance | undefined = userBalances.find((balance) => balance.userId === userId);
-    return userBalance && userBalance.amount < 0 ? 'lightcoral' : 'lightgreen';
+    return userBalance && userBalance.amount < 0 ? '#f2a593' : '#9fd6a5';
 };
 
 export default function BalanceTable({ tricountId }: BalanceTableProps) {
@@ -89,17 +88,18 @@ export default function BalanceTable({ tricountId }: BalanceTableProps) {
     }, [tricountId, users]);
 
     return (
-        <TableContainer>
+        <TableContainer style={{ width: '100%' }}>
             <Table>
                 <TableBody>
-                    {userBalances.map((userBalance, index) => {
-                        const user = users.find((user) => user.id === userBalance.userId);
-                        const displayText = index % 2 === 0 ? `${user?.firstName} ${userBalance.amount}` : `${userBalance.amount} ${user?.firstName}`;
+                    {userBalances.map((userBalance: Balance, index: number) => {
+                        const user: User | undefined = users.find((user) => user.id === userBalance.userId);
+                        const formattedAmount = (userBalance.amount / 100).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
+                        const displayText: string = index % 2 === 0 ? `${user?.firstName} ${formattedAmount}` : `${formattedAmount} ${user?.firstName}`;
                         const [firstCell, secondCell] = displayText.split(' ');
 
                         return (
                             <TableRow key={userBalance.userId}>
-                                <TableCell style={{ backgroundColor: index % 2 === 0 ? '' : getUserBalanceColor(userBalance.userId, userBalances) }}>
+                                <TableCell style={{ backgroundColor: index % 2 === 0 ? '' : getUserBalanceColor(userBalance.userId, userBalances), textAlign: 'right' }}>
                                     {firstCell}
                                 </TableCell>
                                 <TableCell style={{ backgroundColor: index % 2 === 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '' }}>

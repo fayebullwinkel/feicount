@@ -4,10 +4,10 @@ import Tab from '@mui/material/Tab';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
 import { Cost, Transfer } from "../Icons";
-import { Fab } from "@mui/material";
+import { Button, Fab } from "@mui/material";
 import { useEffect, useState } from "react";
 import ExpenseOverview from "../Expense/Overview";
-import {useNavigate, useParams} from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import BalanceTable from '../Balance/BalanceTable';
 
 interface TabPanelProps {
@@ -33,7 +33,7 @@ interface Spender {
 }
 
 function CustomTabPanel(props: TabPanelProps) {
-    const { children, value, index, ...other } = props;
+    const { children, value, index, className, ...other } = props;
 
     return (
         <div
@@ -44,7 +44,7 @@ function CustomTabPanel(props: TabPanelProps) {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
+                <Box sx={{ p: 3, width:'100%' }}>
                     {Array.isArray(children) ? (
                         children.map((child, idx) => (
                             <div key={idx} style={{ display: idx === 0 ? 'block' : 'none' }}>
@@ -66,6 +66,10 @@ function a11yProps(index: number) {
         'aria-controls': `simple-tabpanel-${index}`,
     };
 }
+
+const goBack = (prevPage: string, navigate: NavigateFunction) => {
+    navigate(prevPage);
+};
 
 interface FeicountProps {
     id: string;
@@ -148,6 +152,18 @@ export default function Feicount({ id }: FeicountProps) {
             <CustomTabPanel value={value} index={1} className="center">
                 <BalanceTable tricountId={Number(id)}/>
             </CustomTabPanel>
+
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
+                <Button variant="outlined" color="error" onClick={() => goBack('/', navigate)}>
+                    Zurück
+                </Button>
+                {value === 1 && (
+                    <Button variant="outlined" color="secondary" type="submit">
+                        Zur Abrechnung
+                    </Button>
+                )}
+            </div>
         </Box>
     );
 };
