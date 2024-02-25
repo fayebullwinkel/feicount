@@ -1,9 +1,9 @@
 import { Grid } from "@mui/material";
 import React from "react";
 
-interface ExpenseOverviewProps {
+interface OverviewProps {
     expense: {
-        title: string;
+        title?: string;
         amount: number;
         date: string;
     };
@@ -11,8 +11,7 @@ interface ExpenseOverviewProps {
         firstName: string;
     };
 }
-
-const ExpenseOverview: React.FC<ExpenseOverviewProps> = ({ expense, spender }) => {
+export default function Overview({ expense, spender }: OverviewProps) {
     return (
         <>
             <Grid container spacing={2}>
@@ -32,5 +31,3 @@ const ExpenseOverview: React.FC<ExpenseOverviewProps> = ({ expense, spender }) =
         </>
     );
 };
-
-export default ExpenseOverview;

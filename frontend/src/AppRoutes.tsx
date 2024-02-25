@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 import { ReactElement } from 'react';
 import { useParams } from 'react-router-dom';
 import Home from './components/Home';

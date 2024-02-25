@@ -8,6 +8,7 @@ import { Fab } from "@mui/material";
 import { useEffect, useState } from "react";
 import ExpenseOverview from "../Expense/Overview";
 import {useNavigate, useParams} from "react-router-dom";
+import BalanceTable from '../Balance/BalanceTable';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -19,10 +20,10 @@ interface TabPanelProps {
 interface Expense {
     id: number;
     spenderUserId: number;
-    recipientIds: number;
+    recipientIds: number[];
     amount: number;
     date: string;
-    title: string;
+    title?: string;
 }
 
 interface Spender {
@@ -70,7 +71,7 @@ interface FeicountProps {
     id: string;
 }
 
-const Feicount: React.FC<FeicountProps> = ({ id }) => {
+export default function Feicount({ id }: FeicountProps) {
     const [value, setValue] = useState(0);
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [spender, setSpender] = useState<Spender[]>([]);
@@ -136,7 +137,7 @@ const Feicount: React.FC<FeicountProps> = ({ id }) => {
                             </div>
                         );
                     })}
-                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', margin:"10px"}}>
                         <Fab color="primary" aria-label="add" onClick={addExpense}>
                             <AddIcon />
                         </Fab>
@@ -145,10 +146,8 @@ const Feicount: React.FC<FeicountProps> = ({ id }) => {
             </CustomTabPanel>
 
             <CustomTabPanel value={value} index={1} className="center">
-                Hier Daten zur großen Abrechnung einfügen
+                <BalanceTable tricountId={Number(id)}/>
             </CustomTabPanel>
         </Box>
     );
 };
-
-export default Feicount;

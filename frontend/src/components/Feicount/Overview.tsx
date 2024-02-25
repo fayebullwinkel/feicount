@@ -10,7 +10,7 @@ interface FeicountOverviewProps {
     description: string;
 }
 
-const FeicountOverview: React.FC<FeicountOverviewProps> = ({id, title, description}) => {
+export default function Overview({id, title, description}: FeicountOverviewProps) {
     const navigate: NavigateFunction = useNavigate();
 
     const goToFeicount = () => {
@@ -33,5 +33,3 @@ const FeicountOverview: React.FC<FeicountOverviewProps> = ({id, title, descripti
         </>
     );
 };
-
-export default FeicountOverview;

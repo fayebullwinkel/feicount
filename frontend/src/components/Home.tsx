@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import FeicountOverview from './Feicount/Overview';
 import AddIcon from "@mui/icons-material/Add";
-import {Fab} from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Fab } from "@mui/material";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { Currency } from '../types/Currency';
 import { Category } from '../types/Category';
 
@@ -19,7 +19,7 @@ export interface FeicountData {
 
 export default function Home() {
     const [feicounts, setFeicounts] = useState<FeicountData[]>([]);
-    const navigate = useNavigate();
+    const navigate: NavigateFunction = useNavigate();
     
     useEffect(() => {
         fetchFeicounts();
@@ -45,7 +45,7 @@ export default function Home() {
 
     return (
         <>
-            {feicounts.map((feicount) => (
+            {feicounts.map((feicount: FeicountData) => (
                 <div key={feicount.id}>
                     <FeicountOverview id={feicount.id.toString()} title={feicount.title}
                                       description={feicount.description ? feicount.description : ''}/>
