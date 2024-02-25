@@ -67,40 +67,26 @@ const userBalance: Balance | undefined = userBalances.find((balance) => balance.
 export default function BalanceTable({ tricountId }: BalanceTableProps) {
     const [userBalances, setUserBalances] = useState<Balance[]>([]);
     const [users, setUsers] = useState<User[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                await getTricountUsers(tricountId, setUsers);
-            } catch (error) {
-                console.error('Error fetching users:', error);
-                setIsLoading(false);
-                return;
-            }
-        };
-
-        fetchData();
+        try {
+            setUsers([]);
+            getTricountUsers(tricountId, setUsers);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
     }, [tricountId]);
 
     useEffect(() => {
-        const fetchUserBalances = async () => {
+        if (users.length > 0) {
             try {
-                await getUserBalances(tricountId, users, setUserBalances);
-                setIsLoading(false);
+                setUserBalances([])
+                getUserBalances(tricountId, users, setUserBalances);
             } catch (error) {
                 console.error('Error fetching balances:', error);
-                setIsLoading(false);
             }
-        };
-        if (users.length > 0) {
-            fetchUserBalances();
         }
     }, [tricountId, users]);
-    
-    if (isLoading) {
-        return <p>Loading...</p>;
-    }
 
     return (
         <TableContainer>
