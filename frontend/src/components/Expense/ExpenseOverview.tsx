@@ -8,7 +8,7 @@ interface OverviewProps {
         date: string;
     };
     spender: {
-        firstName: string;
+        userName: string;
     };
 }
 export default function Overview({ expense, spender }: OverviewProps) {
@@ -18,7 +18,7 @@ export default function Overview({ expense, spender }: OverviewProps) {
                 <Grid item xs={8}>
                     <div>{expense.title}</div>
                     <div>
-                        Bezahlt von <b>{spender.firstName}</b>
+                        Bezahlt von <b>{spender.userName}</b>
                     </div>
                 </Grid>
                 <Grid item xs={4}>

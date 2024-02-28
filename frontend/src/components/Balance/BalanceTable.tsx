@@ -64,7 +64,7 @@ export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
                     {userBalances.map((userBalance: Balance, index: number) => {
                         const user: User | undefined = users.find((user) => user.id === userBalance.userId);
                         const formattedAmount = (userBalance.amount / 100).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
-                        const displayText: string = index % 2 === 0 ? `${user?.firstName} ${formattedAmount}` : `${formattedAmount} ${user?.firstName}`;
+                        const displayText: string = index % 2 === 0 ? `${user?.userName} ${formattedAmount}` : `${formattedAmount} ${user?.userName}`;
                         const [firstCell, secondCell] = displayText.split(' ');
 
                         return (

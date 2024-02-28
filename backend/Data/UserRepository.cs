@@ -10,7 +10,7 @@ public interface IUserRepository
     public User? FindById(int id);
     public User Create(User user);
     public void Delete(int id);
-    public User FindByNameOrCreate(NameDto userName);
+    public User FindByNameOrCreate(string userName);
 }
 
 public class UserRepository : IUserRepository
@@ -52,15 +52,14 @@ public class UserRepository : IUserRepository
         _ctx.SaveChanges();
     }
 
-    public User FindByNameOrCreate(NameDto userName)
+    public User FindByNameOrCreate(string userName)
     {
-        var user = _ctx.Users.FirstOrDefault(u => u.FirstName == userName.FirstName && u.LastName == userName.LastName);
+        var user = _ctx.Users.FirstOrDefault(u => u.UserName == userName);
 
         if (user != null) return user;
         user = new User()
         {
-            FirstName = userName.FirstName,
-            LastName = userName.LastName
+            UserName = userName,
         };
 
         _ctx.Users.Add(user);

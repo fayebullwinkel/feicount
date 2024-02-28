@@ -74,8 +74,7 @@ public class FeicountMapper: IFeicountMapper
         return new UserDto
         {
             Id = model.Id,
-            FirstName = model.FirstName,
-            LastName = model.LastName,
+            UserName = model.UserName,
             FeicountIds = model.Feicounts.Select(t => t.Id).ToList(),
             ExpenseIds = model.Expenses.Select(e => e.Id).ToList()
         };

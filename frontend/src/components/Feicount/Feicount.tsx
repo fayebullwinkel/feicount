@@ -28,14 +28,12 @@ interface Expense {
 
 interface Spender {
     id: number;
-    firstName: string;
-    lastName: string;
+    userName: string;
 }
 
 export interface User {
     id: number,
-    firstName: string,
-    lastName: string,
+    userName: string;
     expenseIds: number[]
 }
 

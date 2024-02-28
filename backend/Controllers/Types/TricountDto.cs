@@ -10,6 +10,6 @@ public class FeicountDto
     public Currency Currency { get; set; }
     public Category Category { get; set; }
     public List<int>? UserIds { get; set; }
-    public List<NameDto>? UserNames { get; set; }
+    public List<string>? UserNames { get; set; }
     public List<int>? ExpenseIds { get; set; }
 }

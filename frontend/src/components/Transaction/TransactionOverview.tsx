@@ -70,13 +70,13 @@ export default function TransactionOverview({ feicountId, users }: OverviewProps
                             <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px', width: '100%' }}>
                                 <div style={{ flex: 1 }}>
                                     <Typography component="p" variant="h6" style={{ margin: '10px' }}>
-                                        {users.find(user => user.id === transaction.debtorId)?.firstName}
+                                        {users.find(user => user.id === transaction.debtorId)?.userName}
                                     </Typography>
                                     <Typography color="text-secondary" variant="body2" component="p" style={{ margin: '10px' }}>
                                         schuldet
                                     </Typography>
                                     <Typography variant="h6" style={{ margin: '10px' }} gutterBottom>
-                                        {users.find(user => user.id === transaction.creditorId)?.firstName}
+                                        {users.find(user => user.id === transaction.creditorId)?.userName}
                                     </Typography>
                                 </div>
                                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
