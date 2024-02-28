@@ -65,17 +65,26 @@ export default function TransactionOverview({ feicountId, users }: OverviewProps
         <div>
             {transactions.map((transaction) => {
                 return (
-                    <Card key={transaction.id}>
-                        <CardContent>
-                            <Typography color="textSecondary" gutterBottom>
-                                Creditor: {users.find(user => user.id === transaction.creditorId)?.firstName}
-                            </Typography>
-                            <Typography variant="body2" component="p">
-                                Debtor: {users.find(user => user.id === transaction.debtorId)?.firstName}
-                            </Typography>
-                            <Typography variant="body2" component="p">
-                                Amount: {(transaction.amount / 100).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
-                            </Typography>
+                    <Card key={transaction.id} style={{ margin: '10px' }}>
+                        <CardContent style={{ display: 'flex', alignItems: 'center' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px', width: '100%' }}>
+                                <div style={{ flex: 1 }}>
+                                    <Typography component="p" variant="h6" style={{ margin: '10px' }}>
+                                        {users.find(user => user.id === transaction.debtorId)?.firstName}
+                                    </Typography>
+                                    <Typography color="text-secondary" variant="body2" component="p" style={{ margin: '10px' }}>
+                                        schuldet
+                                    </Typography>
+                                    <Typography variant="h6" style={{ margin: '10px' }} gutterBottom>
+                                        {users.find(user => user.id === transaction.creditorId)?.firstName}
+                                    </Typography>
+                                </div>
+                                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Typography component="p" variant="h6">
+                                        {(transaction.amount / 100).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
+                                    </Typography>
+                                </div>
+                            </div>
                         </CardContent>
                     </Card>
                 );
