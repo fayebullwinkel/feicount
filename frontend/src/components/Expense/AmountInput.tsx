@@ -17,10 +17,6 @@ function parseMonetaryValue(valueString: string) {
     const sign = match[1] ? -1 : 1
     const euros = parseInt(match[2]) || 0
     let cents = parseInt(match[3]) || 0
-
-    if (cents < 10)
-        cents *= 10
-
     return sign * (euros * 100 + cents)
 }
 

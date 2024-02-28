@@ -4,8 +4,7 @@ import {
     TableBody,
     TableCell,
     TableContainer,
-    TableRow,
-    Paper
+    TableRow
 } from '@mui/material';
 import { User } from '../Feicount/Feicount';
 
@@ -19,26 +18,6 @@ interface Balance {
     amount: number
 }
 
-const getUserBalances = async (tricountId: number, users: User[], setUserBalances: React.Dispatch<React.SetStateAction<Balance[]>>) => {
-    try {
-        const fetchUserBalance = async (user: User) => {
-            const userBalanceResponse = await fetch(`/api/Feicount/${tricountId}/Users/${user.id}/Balance`);
-
-            if (!userBalanceResponse.ok) {
-                throw new Error(`Failed to fetch user balance for user ${user.id}`);
-            }
-            return userBalanceResponse.json();
-        };
-
-        const userBalances = await Promise.all(users.map(fetchUserBalance));
-
-        setUserBalances(userBalances);
-    } catch (error) {
-        console.error('Error fetching user balance:', error);
-    }
-};
-
-
 const getUserBalanceColor = (userId: number, userBalances: Balance[]) => {
 const userBalance: Balance | undefined = userBalances.find((balance) => balance.userId === userId);
     return userBalance && userBalance.amount < 0 ? '#f2a593' : '#9fd6a5';
@@ -48,13 +27,33 @@ export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
     const [userBalances, setUserBalances] = useState<Balance[]>([]);
 
     useEffect(() => {
-        if (users.length > 0) {
+        const fetchUserBalance = async (user: User) => {
             try {
-                setUserBalances([])
-                getUserBalances(tricountId, users, setUserBalances);
+                const userBalanceResponse = await fetch(`/api/Feicount/${tricountId}/Users/${user.id}/Balance`);
+
+                if (!userBalanceResponse.ok) {
+                    throw new Error(`Failed to fetch user balance for user ${user.id}`);
+                }
+
+                return await userBalanceResponse.json();
+            } catch (error) {
+                console.error('Error fetching user balance:', error);
+                return { userId: user.id, amount: 0 };
+            }
+        };
+
+        const getUserBalances = async () => {
+            try {
+                const userBalances = await Promise.all(users.map(fetchUserBalance));
+                setUserBalances(userBalances);
             } catch (error) {
                 console.error('Error fetching balances:', error);
             }
+        };
+
+        if (users.length > 0) {
+            setUserBalances([]);
+            getUserBalances();
         }
     }, [tricountId, users]);
 

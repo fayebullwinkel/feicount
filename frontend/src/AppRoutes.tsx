@@ -1,11 +1,11 @@
 import React from 'react';
 import { ReactElement } from 'react';
-import { useParams } from 'react-router-dom';
+import {useLocation, useParams } from 'react-router-dom';
 import Home from './components/Home';
 import NewFeicount from './components/Feicount/NewFeicount';
 import NewExpense from './components/Expense/NewExpense';
 import Feicount from './components/Feicount/Feicount';
-import Overview from './components/Transaction/TransactionOverview';
+import TransactionOverview from './components/Transaction/TransactionOverview';
 
 interface AppRoute {
   index?: boolean;
@@ -16,6 +16,14 @@ interface AppRoute {
 const FeicountWrapper = () => {
   const { id } = useParams();
   return <Feicount id={id!} />;
+};
+
+const TransactionWrapper = () => {
+  const { id } = useParams();
+  const location = useLocation();
+  const { users } = location.state || {};
+
+  return <TransactionOverview feicountId={Number(id)} users={users} />;
 };
 
 const AppRoutes: AppRoute[] = [
@@ -34,6 +42,10 @@ const AppRoutes: AppRoute[] = [
   {
     path: '/feicount/:id/expenses/new',
     element: <NewExpense />
+  },
+  {
+    path: '/feicount/:id/transactions',
+    element: <TransactionWrapper />
   }
 ];
 export default AppRoutes;
