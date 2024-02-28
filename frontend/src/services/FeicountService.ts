@@ -12,8 +12,7 @@ export interface ExpenseData {
 
 export interface UserData {
     id: number,
-    firstName: string,
-    lastName: string,
+    userName: string,
     feicountIds?: number[];
     expenseIds?: number[];
     checked?: boolean;

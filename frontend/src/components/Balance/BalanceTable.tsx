@@ -25,7 +25,7 @@ const userBalance: Balance | undefined = userBalances.find((balance) => balance.
 
 export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
     const [userBalances, setUserBalances] = useState<Balance[]>([]);
-
+    console.log("users: ", users[0].userName);
     useEffect(() => {
         const fetchUserBalance = async (user: User) => {
             try {
@@ -64,12 +64,12 @@ export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
                     {userBalances.map((userBalance: Balance, index: number) => {
                         const user: User | undefined = users.find((user) => user.id === userBalance.userId);
                         const formattedAmount = (userBalance.amount / 100).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
-                        const displayText: string = index % 2 === 0 ? `${user?.userName} ${formattedAmount}` : `${formattedAmount} ${user?.userName}`;
-                        const [firstCell, secondCell] = displayText.split(' ');
+                        const displayText: string = index % 2 === 0 ? `${user?.userName} | ${formattedAmount}` : `${formattedAmount} | ${user?.userName}`;
+                        const [firstCell, secondCell] = displayText.split(' | ');
 
                         return (
                             <TableRow key={userBalance.userId}>
-                                <TableCell style={{ backgroundColor: index % 2 === 0 ? '' : getUserBalanceColor(userBalance.userId, userBalances), textAlign: 'right' }}>
+                                <TableCell style={{ backgroundColor: index % 2 === 0 ? '' : getUserBalanceColor(userBalance.userId, userBalances), textAlign: 'right', width: "50%"}}>
                                     {firstCell}
                                 </TableCell>
                                 <TableCell style={{ backgroundColor: index % 2 === 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '' }}>

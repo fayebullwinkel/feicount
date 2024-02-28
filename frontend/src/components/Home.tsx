@@ -13,7 +13,7 @@ export interface FeicountData {
     currency: Currency;
     category: Category;
     userIds?: number[];
-    userNames?: { firstName: string, lastName: string }[];
+    userNames?: string[];
     expenseIds?: number[];
 }
 

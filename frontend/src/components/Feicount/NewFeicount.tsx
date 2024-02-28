@@ -59,12 +59,6 @@ export default function NewFeicount() {
         if (title == '') {
             setTitleError(true);
         }
-        
-        const postNames = userNames.map(userName => {
-            const [firstName, ...lastNameParts] = userName.split(' ');
-            const lastName = lastNameParts.join(' ');
-            return { firstName, lastName };
-        })
 
         const postData: FeicountData = {
             id: 0,
@@ -73,7 +67,7 @@ export default function NewFeicount() {
             currency: mapToCurrency(currency),
             category: mapToCategory(category),
             userIds: [], // TODO: fill with actual values
-            userNames: postNames,
+            userNames,
             expenseIds: [] // TODO: fill with actual values
         };
 

@@ -23,7 +23,7 @@ export default function SpenderSelector({ users, spenderUserId, setSpenderUserId
         >
             {users.map((userData: UserData) => (
                 <MenuItem key={userData.id} value={userData.id}>
-                    {userData.firstName} {userData.lastName}
+                    {userData.userName}
                 </MenuItem>
             ))}
         </TextField>

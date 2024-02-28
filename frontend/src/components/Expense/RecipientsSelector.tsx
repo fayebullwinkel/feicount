@@ -76,7 +76,7 @@ const RecipientsSelector = ({ users, setUsers, currency, amount }: RecipientsSel
                     >
                         <div>
                             <FormControlLabel
-                                label={`${user.firstName} ${user.lastName}`}
+                                label={`${user.userName}`}
                                 control={
                                     <Checkbox
                                         checked={user.checked}
