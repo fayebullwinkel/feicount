@@ -19,13 +19,13 @@ export default function FeicountOverview({id, title, description}: FeicountOverv
 
     return (
         <>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} style={{margin:"10px"}} onClick={goToFeicount}>
                 <Grid item xs={8}>
                     <h3>{title}</h3>
-                    {description}
+                    {description || "keine Beschreibung"}
                 </Grid>
                 <Grid item xs={4} display="flex" justifyContent="center" alignItems="center">
-                    <Button variant="text" onClick={goToFeicount}>
+                    <Button variant="text">
                         <ArrowForwardIosIcon/>
                     </Button>
                 </Grid>
