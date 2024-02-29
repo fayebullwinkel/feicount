@@ -25,7 +25,8 @@ const userBalance: Balance | undefined = userBalances.find((balance) => balance.
 
 export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
     const [userBalances, setUserBalances] = useState<Balance[]>([]);
-    console.log("users: ", users[0].userName);
+    const [maxBalance, setMaxBalance] = useState<number>(0);
+    
     useEffect(() => {
         const fetchUserBalance = async (user: User) => {
             try {
@@ -44,8 +45,13 @@ export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
 
         const getUserBalances = async () => {
             try {
-                const userBalances = await Promise.all(users.map(fetchUserBalance));
+                const userBalances: Balance[] = await Promise.all(users.map(fetchUserBalance));
                 setUserBalances(userBalances);
+                const absoluteMaxBalance: number =  Math.max(
+                    ...userBalances.map((balance) => Math.abs(balance.amount))
+                )/100;
+                console.log(absoluteMaxBalance);
+                setMaxBalance(absoluteMaxBalance);
             } catch (error) {
                 console.error('Error fetching balances:', error);
             }
@@ -69,11 +75,42 @@ export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
 
                         return (
                             <TableRow key={userBalance.userId}>
-                                <TableCell style={{ backgroundColor: index % 2 === 0 ? '' : getUserBalanceColor(userBalance.userId, userBalances), textAlign: 'right', width: "50%"}}>
-                                    {firstCell}
+                                <TableCell
+                                    style={{
+                                        display: 'flex',
+                                        justifyContent: 'flex-end',
+                                        padding: 0
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            backgroundColor: index % 2 !== 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '',
+                                            width: index % 2 !== 0 ? `${Math.abs(userBalance.amount) / maxBalance}%` : 'auto',
+                                            height: '100%',
+                                            padding: '16px',
+                                            display: 'flex',
+                                            justifyContent: 'flex-end'
+                                        }}
+                                    >
+                                        {firstCell}
+                                    </div>
                                 </TableCell>
-                                <TableCell style={{ backgroundColor: index % 2 === 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '' }}>
-                                    {secondCell}
+
+                                <TableCell
+                                    style={{
+                                        padding: 0
+                                    }}
+                                >
+                                    <div
+                                        style={{
+                                            backgroundColor: index % 2 === 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '',
+                                            width: index % 2 === 0 ? `${Math.abs(userBalance.amount) / maxBalance}%` : 'auto',
+                                            height: '100%',
+                                            padding: '16px'
+                                        }}
+                                    >
+                                        {secondCell}
+                                    </div>
                                 </TableCell>
                             </TableRow>
                         );
