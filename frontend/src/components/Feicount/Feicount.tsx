@@ -3,11 +3,11 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import AddIcon from '@mui/icons-material/Add';
 import Box from '@mui/material/Box';
-import { Cost, Transfer } from "../Icons";
-import { Button, Fab } from "@mui/material";
-import { useEffect, useState } from "react";
+import {Cost, Transfer} from "../Icons";
+import {Button, Fab} from "@mui/material";
+import {useEffect, useState} from "react";
 import ExpenseOverview from "../Expense/ExpenseOverview";
-import { useNavigate } from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import BalanceTable from '../Balance/BalanceTable';
 
 interface TabPanelProps {
@@ -38,7 +38,7 @@ export interface User {
 }
 
 function CustomTabPanel(props: TabPanelProps) {
-    const { children, value, index, className, ...other } = props;
+    const {children, value, index, className, ...other} = props;
 
     return (
         <div
@@ -49,15 +49,15 @@ function CustomTabPanel(props: TabPanelProps) {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3, width:'100%' }}>
+                <Box sx={{p: 3, width: '100%'}}>
                     {Array.isArray(children) ? (
                         children.map((child, idx) => (
-                            <div key={idx} style={{ display: idx === 0 ? 'block' : 'none' }}>
+                            <div key={idx} style={{display: idx === 0 ? 'block' : 'none'}}>
                                 {child}
                             </div>
                         ))
                     ) : (
-                        <div style={{ display: 'block' }}>{children}</div>
+                        <div style={{display: 'block'}}>{children}</div>
                     )}
                 </Box>
             )}
@@ -90,7 +90,7 @@ interface FeicountProps {
     id: string;
 }
 
-export default function Feicount({ id }: FeicountProps) {
+export default function Feicount({id}: FeicountProps) {
     const [value, setValue] = useState(0);
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [spender, setSpender] = useState<Spender[]>([]);
@@ -105,7 +105,7 @@ export default function Feicount({ id }: FeicountProps) {
             console.error('Error fetching users:', error);
         }
     }, [Number(id)]);
-    
+
     useEffect(() => {
         const fetchTriountOverviewData = async () => {
             try {
@@ -139,8 +139,8 @@ export default function Feicount({ id }: FeicountProps) {
     }
 
     return (
-        <Box sx={{ width: '100%' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Box sx={{width: '100%'}}>
+            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                 <Tabs
                     value={value}
                     onChange={handleChange}
@@ -149,8 +149,8 @@ export default function Feicount({ id }: FeicountProps) {
                     aria-label="tabs"
                     centered
                 >
-                    <Tab icon={<Cost />} label="AUSGABEN" {...a11yProps(0)} />
-                    <Tab icon={<Transfer />} label="SALDEN" {...a11yProps(1)} />
+                    <Tab icon={<Cost/>} label="AUSGABEN" {...a11yProps(0)} />
+                    <Tab icon={<Transfer/>} label="SALDEN" {...a11yProps(1)} />
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0} className="center">
@@ -161,14 +161,14 @@ export default function Feicount({ id }: FeicountProps) {
                         return (
                             <div key={expense.id}>
                                 {currentSpender && (
-                                    <ExpenseOverview expense={expense} spender={currentSpender} />
+                                    <ExpenseOverview expense={expense} spender={currentSpender}/>
                                 )}
                             </div>
                         );
                     })}
-                    <div style={{display: 'flex',  justifyContent:'center', alignItems:'center', margin:"10px"}}>
+                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', margin: "10px"}}>
                         <Fab color="primary" aria-label="add" onClick={addExpense}>
-                            <AddIcon />
+                            <AddIcon/>
                         </Fab>
                     </div>
                 </div>
@@ -179,12 +179,13 @@ export default function Feicount({ id }: FeicountProps) {
             </CustomTabPanel>
 
 
-            <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
+            <div style={{display: 'flex', justifyContent: 'space-between', margin: '10px'}}>
                 <Button variant="outlined" color="error" onClick={() => navigate("/")}>
                     Zurück
                 </Button>
                 {value === 1 && (
-                    <Button variant="outlined" color="secondary" onClick={() => navigate(`/feicount/${id}/transactions`, { state: { users } })}>
+                    <Button variant="outlined" color="secondary"
+                            onClick={() => navigate(`/feicount/${id}/transactions`, {state: {users}})}>
                         Zur Abrechnung
                     </Button>
                 )}

@@ -14,7 +14,7 @@ interface OverviewProps {
 export default function Overview({ expense, spender }: OverviewProps) {
     return (
         <>
-            <Grid container spacing={2}>
+            <Grid container margin='10px' spacing={2}>
                 <Grid item xs={8}>
                     <div>{expense.title}</div>
                     <div>

@@ -70,7 +70,7 @@ export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
                     {userBalances.map((userBalance: Balance, index: number) => {
                         const user: User | undefined = users.find((user) => user.id === userBalance.userId);
                         const formattedAmount = (userBalance.amount / 100).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' });
-                        const displayText: string = index % 2 === 0 ? `${user?.userName} | ${formattedAmount}` : `${formattedAmount} | ${user?.userName}`;
+                        const displayText: string = userBalance.amount > 0 ? `${user?.userName} | ${formattedAmount}` : `${formattedAmount} | ${user?.userName}`;
                         const [firstCell, secondCell] = displayText.split(' | ');
 
                         return (
@@ -79,34 +79,31 @@ export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
                                     style={{
                                         display: 'flex',
                                         justifyContent: 'flex-end',
-                                        padding: 0
                                     }}
                                 >
                                     <div
                                         style={{
-                                            backgroundColor: index % 2 !== 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '',
+                                            backgroundColor: userBalance.amount <= 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '',
                                             width: index % 2 !== 0 ? `${Math.abs(userBalance.amount) / maxBalance}%` : 'auto',
                                             height: '100%',
                                             padding: '16px',
                                             display: 'flex',
-                                            justifyContent: 'flex-end'
+                                            justifyContent: 'flex-end',
+                                            borderRadius: '5px 0 0 5px'
                                         }}
                                     >
                                         {firstCell}
                                     </div>
                                 </TableCell>
 
-                                <TableCell
-                                    style={{
-                                        padding: 0
-                                    }}
-                                >
+                                <TableCell>
                                     <div
                                         style={{
-                                            backgroundColor: index % 2 === 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '',
+                                            backgroundColor: userBalance.amount > 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '',
                                             width: index % 2 === 0 ? `${Math.abs(userBalance.amount) / maxBalance}%` : 'auto',
                                             height: '100%',
-                                            padding: '16px'
+                                            padding: '16px',
+                                            borderRadius: '0 5px 5px 0'
                                         }}
                                     >
                                         {secondCell}

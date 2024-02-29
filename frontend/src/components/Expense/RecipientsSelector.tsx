@@ -11,7 +11,8 @@ interface RecipientsSelectorProps {
 
 const RecipientsSelector = ({ users, setUsers, currency, amount }: RecipientsSelectorProps) => {
     const [userShares, setUserShares] = useState<Record<number, number>>({});
-
+    const atLeastOneChecked = users.some((user) => user.checked);
+    
     const parentCheckboxProps = {
         checked: users.every((user) => user.checked),
         indeterminate:
@@ -86,8 +87,11 @@ const RecipientsSelector = ({ users, setUsers, currency, amount }: RecipientsSel
                             />
                         </div>
                         <div>
-                            {userShares[user.id]?.toFixed(2).replace(".", ",") || "0,00"}{" "}
-                            {currency}
+                            {atLeastOneChecked ? (
+                                `${userShares[user.id]?.toFixed(2).replace(".", ",") || "0,00"} ${currency}`
+                            ) : (
+                                `0,00 ${currency}`
+                            )}
                         </div>
                     </div>
                 ))}

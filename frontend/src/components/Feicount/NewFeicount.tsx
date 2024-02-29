@@ -35,7 +35,6 @@ export default function NewFeicount() {
         }
     };
 
-
     const handleEditInput = (index: number | null) => {
         if (index !== null) {
             setEditIndex(index);
@@ -43,12 +42,18 @@ export default function NewFeicount() {
         }
     };
 
-
     const handleDeleteInput = (index: number) => {
         const updatedInputs = [...userNames];
         updatedInputs.splice(index, 1);
         setUserNames(updatedInputs);
         setEditIndex(null);
+    };
+
+    const handleUserInputKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleSaveInput();
+        }
     };
 
     const handleSubmit = async (event: any) => {
@@ -93,7 +98,7 @@ export default function NewFeicount() {
     return (
         <React.Fragment>
             <form autoComplete="off" onSubmit={handleSubmit}>
-                <div style={{ display: 'flex', justifyContent: 'center', margin: '10px' }}>
+                <div style={{display: 'flex', justifyContent: 'center', margin: '10px'}}>
                     <h2>Neuer Feicount</h2>
                 </div>
                 <TitleInput title={title} setTitle={setTitle} titleError={titleError}/>
@@ -120,28 +125,33 @@ export default function NewFeicount() {
                         ))}
                 </TextField>
                 <div>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <TextField
-                            label="Teilnehmer:innen"
-                            value={currentUser}
-                            onChange={(e) => setCurrentUser(e.target.value)}
-                            fullWidth
-                            sx={{ marginRight: '8px' }}
-                        />
-                        <Button variant="outlined" color="primary" onClick={handleSaveInput}>
-                            {editIndex !== null ? 'Speichern' : 'Hinzufügen'}
-                        </Button>
+                    <div>
+                        <div style={{display: 'flex', alignItems: 'center'}}>
+                            <TextField
+                                label="Teilnehmer:innen"
+                                value={currentUser}
+                                onChange={(e) => setCurrentUser(e.target.value)}
+                                fullWidth
+                                sx={{marginRight: '8px'}}
+                                onKeyPress={handleUserInputKeyPress}
+                            />
+                            <Button variant="outlined" color="primary" onClick={handleSaveInput}>
+                                {editIndex !== null ? 'Speichern' : 'Hinzufügen'}
+                            </Button>
+                        </div>
                     </div>
                     {userNames.length > 0 && (
                         <List>
                             {userNames.map((input, index) => (
                                 <ListItem key={index}>
-                                    <ListItemText primary={input} />
-                                    <div style={{ display: 'flex', gap: '8px' }}>
-                                        <Button variant="outlined" color="primary" onClick={() => handleEditInput(index)}>
+                                    <ListItemText primary={input}/>
+                                    <div style={{display: 'flex', gap: '8px'}}>
+                                        <Button variant="outlined" color="primary"
+                                                onClick={() => handleEditInput(index)}>
                                             Ändern
                                         </Button>
-                                        <Button variant="outlined" color="error" onClick={() => handleDeleteInput(index)}>
+                                        <Button variant="outlined" color="error"
+                                                onClick={() => handleDeleteInput(index)}>
                                             Löschen
                                         </Button>
                                     </div>
