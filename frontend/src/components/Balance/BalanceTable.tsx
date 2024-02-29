@@ -47,10 +47,10 @@ export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
             try {
                 const userBalances: Balance[] = await Promise.all(users.map(fetchUserBalance));
                 setUserBalances(userBalances);
+                
                 const absoluteMaxBalance: number =  Math.max(
                     ...userBalances.map((balance) => Math.abs(balance.amount))
                 )/100;
-                console.log(absoluteMaxBalance);
                 setMaxBalance(absoluteMaxBalance);
             } catch (error) {
                 console.error('Error fetching balances:', error);
