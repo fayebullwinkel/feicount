@@ -1,60 +1,70 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {TextField, Button, MenuItem, Box, List, ListItem, ListItemText} from "@mui/material";
 import {Currency, mapToCurrency} from "../../types/Currency";
 import {Category, mapToCategory} from "../../types/Category";
 import {FeicountData} from "../Home";
 import {useNavigate} from "react-router-dom";
-import FormActions from "../FormActions";
+import {User} from "./Feicount";
 import TitleInput from "./TitleInput";
 import DescriptionInput from "./DescriptionInput";
 import CurrencySelector from "../Shared/CurrencySelector";
+import CategorySelector from "./CategorySelector";
+import FeicountUserInput from "./FeicountUserInput";
+import FormActions from "../FormActions";
 
-export default function NewFeicount() {
+export default function NewFeicount({id}: { id?: string }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [currency, setCurrency] = useState(Currency[Currency.EUR]);
     const [category, setCategory] = useState(Category[Category.Reise]);
     const [titleError, setTitleError] = useState(false);
-    const [currentUser, setCurrentUser] = useState<string>('');
     const [userNames, setUserNames] = useState<string[]>([]);
-    const [editIndex, setEditIndex] = useState<number | null>(null);
+    const [feicount, setFeicount] = useState<FeicountData | null>(null);
     const navigate = useNavigate();
 
-    const handleSaveInput = () => {
-        if (currentUser.trim() !== '') {
-            if (editIndex !== null) {
-                const updatedInputs = [...userNames];
-                updatedInputs[editIndex] = currentUser;
-                setUserNames(updatedInputs);
-                setEditIndex(null);
-            } else {
-                setUserNames([...userNames, currentUser]);
+    useEffect(() => {
+        const fetchFeicount = async () => {
+            const feicountResponse = await fetch(`/api/Feicount/${id}`);
+
+            if (!feicountResponse.ok) {
+                throw new Error(`Failed to fetch feicount with id ${id}`);
             }
 
-            setCurrentUser('');
-        }
-    };
+            const feicountData = await feicountResponse.json();
+            setFeicount(feicountData);
+        };
 
-    const handleEditInput = (index: number | null) => {
-        if (index !== null) {
-            setEditIndex(index);
-            setCurrentUser(userNames[index] || '');
+        if (id) {
+            fetchFeicount();
         }
-    };
+    }, [id]);
 
-    const handleDeleteInput = (index: number) => {
-        const updatedInputs = [...userNames];
-        updatedInputs.splice(index, 1);
-        setUserNames(updatedInputs);
-        setEditIndex(null);
-    };
+    useEffect(() => {
+        const fetchUsers = async () => {
+            const usersResponse = await fetch(`/api/Feicount/${id}/Users`);
 
-    const handleUserInputKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            handleSaveInput();
+            if (!usersResponse.ok) {
+                throw new Error(`Failed to fetch feicount with id ${id}`);
+            }
+
+            const usersData = await usersResponse.json();
+            setUserNames(usersData.map((userData: User) => userData.userName));
+        };
+
+        if (id) {
+            fetchUsers();
         }
-    };
+    }, [id]);
+
+    useEffect(() => {
+        if (feicount) {
+            setTitle(feicount.title || "");
+            setDescription(feicount.description || "");
+            setCurrency(Currency[feicount.currency] || Currency[Currency.EUR]);
+            setCategory(Category[feicount.category] || Category[Category.Reise]);
+            console.log(feicount.userNames);
+        }
+    }, [feicount]);
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -71,9 +81,9 @@ export default function NewFeicount() {
             description,
             currency: mapToCurrency(currency),
             category: mapToCategory(category),
-            userIds: [], // TODO: fill with actual values
+            userIds: [],
             userNames,
-            expenseIds: [] // TODO: fill with actual values
+            expenseIds: []
         };
 
         try {
@@ -99,67 +109,13 @@ export default function NewFeicount() {
         <React.Fragment>
             <form autoComplete="off" onSubmit={handleSubmit}>
                 <div style={{display: 'flex', justifyContent: 'center', margin: '10px'}}>
-                    <h2>Neuer Feicount</h2>
+                    <h2>{id ? `${feicount?.title || 'Feicount'}` : 'Neuer Feicount'}</h2>
                 </div>
                 <TitleInput title={title} setTitle={setTitle} titleError={titleError}/>
                 <DescriptionInput description={description} setDescription={setDescription}/>
                 <CurrencySelector currency={currency} setCurrency={setCurrency}/>
-                <TextField
-                    label="Kategorie"
-                    onChange={(event) => setCategory(event.target.value)}
-                    required
-                    variant="outlined"
-                    color="secondary"
-                    type="category"
-                    value={category}
-                    select
-                    fullWidth
-                    sx={{mb: 3}}
-                >
-                    {Object.values(Category)
-                        .filter((value) => typeof value === 'string')
-                        .map((categoryKey) => (
-                            <MenuItem key={categoryKey} value={categoryKey}>
-                                {categoryKey}
-                            </MenuItem>
-                        ))}
-                </TextField>
-                <div>
-                    <div>
-                        <div style={{display: 'flex', alignItems: 'center'}}>
-                            <TextField
-                                label="Teilnehmer:innen"
-                                value={currentUser}
-                                onChange={(e) => setCurrentUser(e.target.value)}
-                                fullWidth
-                                sx={{marginRight: '8px'}}
-                                onKeyPress={handleUserInputKeyPress}
-                            />
-                            <Button variant="outlined" color="primary" onClick={handleSaveInput}>
-                                {editIndex !== null ? 'Speichern' : 'Hinzufügen'}
-                            </Button>
-                        </div>
-                    </div>
-                    {userNames.length > 0 && (
-                        <List>
-                            {userNames.map((input, index) => (
-                                <ListItem key={index}>
-                                    <ListItemText primary={input}/>
-                                    <div style={{display: 'flex', gap: '8px'}}>
-                                        <Button variant="outlined" color="primary"
-                                                onClick={() => handleEditInput(index)}>
-                                            Ändern
-                                        </Button>
-                                        <Button variant="outlined" color="error"
-                                                onClick={() => handleDeleteInput(index)}>
-                                            Löschen
-                                        </Button>
-                                    </div>
-                                </ListItem>
-                            ))}
-                        </List>
-                    )}
-                </div>
+                <CategorySelector category={category} setCategory={setCategory}/>
+                <FeicountUserInput userNames={userNames} setUserNames={setUserNames}/>
                 <FormActions prevPage={'/'} navigate={navigate}/>
             </form>
         </React.Fragment>

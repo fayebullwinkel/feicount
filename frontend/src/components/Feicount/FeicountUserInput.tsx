@@ -1,7 +1,5 @@
-import {Button, List, ListItem, ListItemText, MenuItem, TextField} from "@mui/material";
-import {Category} from "../../types/Category";
+import {Button, List, ListItem, ListItemText, TextField} from "@mui/material";
 import React, {useState} from "react";
-import {User} from "./Feicount";
 
 interface FeicountUserInputProps {
     userNames: string[];

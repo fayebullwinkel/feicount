@@ -8,7 +8,7 @@ namespace feicount.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class FeicountController: ControllerBase
+public class FeicountController : ControllerBase
 {
     private readonly IFeicountMapper _feicountMapper;
     private readonly IFeicountService _feicountService;
@@ -40,15 +40,16 @@ public class FeicountController: ControllerBase
     [HttpGet("{id}/Expenses")]
     public List<ExpenseDto> GetExpenses(int id)
     {
-        return _feicountService.GetFeicountExpenses(id).Select(expense => _feicountMapper.ToExpenseDto(expense)).ToList();
+        return _feicountService.GetFeicountExpenses(id).Select(expense => _feicountMapper.ToExpenseDto(expense))
+            .ToList();
     }
-    
+
     [HttpGet("{id}/Users")]
     public List<UserDto> GetUsers(int id)
     {
         return _feicountService.GetFeicountUsers(id).Select(user => _feicountMapper.ToUserDto(user)).ToList();
     }
-    
+
     [HttpPost("{id}/Users/{userId}")]
     public void AddUser(int id, int userId)
     {
@@ -60,7 +61,7 @@ public class FeicountController: ControllerBase
     {
         return _feicountService.GetUserBalance(id, userId);
     }
-    
+
     [HttpPost]
     public void Post([FromBody] FeicountDto dto)
     {
@@ -72,7 +73,7 @@ public class FeicountController: ControllerBase
     {
         _feicountService.AddExpenseToFeicount(id, dto);
     }
-    
+
     [HttpDelete("{id}")]
     public void Delete(int id)
     {
@@ -89,5 +90,20 @@ public class FeicountController: ControllerBase
     public void DeleteFeicountUser(int id, int userId)
     {
         _feicountService.DeleteFeicountUser(id, userId);
+    }
+
+    [HttpPut("{id}")]
+    public IActionResult UpdateFeicount(int id, [FromBody] FeicountDto updatedFeicountDto)
+    {
+        try
+        {
+            _feicountService.UpdateFeicount(id, updatedFeicountDto);
+
+            return Ok($"Feicount with id {id} updated successfully.");
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, "Internal server error");
+        }
     }
 }

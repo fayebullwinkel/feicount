@@ -138,58 +138,67 @@ export default function Feicount({id}: FeicountProps) {
         navigate(`/feicount/${id}/expenses/new`);
     }
 
+    function updateFeicount() {
+        navigate(`/feicount/${id}/udpate`)
+    }
+
     return (
-        <Box sx={{width: '100%'}}>
-            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-                <Tabs
-                    value={value}
-                    onChange={handleChange}
-                    textColor="secondary"
-                    indicatorColor="secondary"
-                    aria-label="tabs"
-                    centered
-                >
-                    <Tab icon={<Cost/>} label="AUSGABEN" {...a11yProps(0)} />
-                    <Tab icon={<Transfer/>} label="SALDEN" {...a11yProps(1)} />
-                </Tabs>
-            </Box>
-            <CustomTabPanel value={value} index={0} className="center">
-                <div>
-                    {expenses.map((expense) => {
-                        const currentSpender = spender.find((sp: Spender) => sp.id === expense.spenderUserId);
+        <div>
+            {value === 0 && (
+                <div style={{textAlign: "right", color: "grey"}} onClick={updateFeicount}>Bearbeiten</div>
+            )}
+            <Box sx={{width: '100%'}}>
+                <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+                    <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        textColor="secondary"
+                        indicatorColor="secondary"
+                        aria-label="tabs"
+                        centered
+                    >
+                        <Tab icon={<Cost/>} label="AUSGABEN" {...a11yProps(0)} />
+                        <Tab icon={<Transfer/>} label="SALDEN" {...a11yProps(1)} />
+                    </Tabs>
+                </Box>
+                <CustomTabPanel value={value} index={0} className="center">
+                    <div>
+                        {expenses.map((expense) => {
+                            const currentSpender = spender.find((sp: Spender) => sp.id === expense.spenderUserId);
 
-                        return (
-                            <div key={expense.id}>
-                                {currentSpender && (
-                                    <ExpenseOverview expense={expense} spender={currentSpender}/>
-                                )}
-                            </div>
-                        );
-                    })}
-                    <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', margin: "10px"}}>
-                        <Fab color="primary" aria-label="add" onClick={addExpense}>
-                            <AddIcon/>
-                        </Fab>
+                            return (
+                                <div key={expense.id}>
+                                    {currentSpender && (
+                                        <ExpenseOverview expense={expense} spender={currentSpender}/>
+                                    )}
+                                </div>
+                            );
+                        })}
+                        <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', margin: "10px"}}>
+                            <Fab color="primary" aria-label="add" onClick={addExpense}>
+                                <AddIcon/>
+                            </Fab>
+                        </div>
                     </div>
-                </div>
-            </CustomTabPanel>
+                </CustomTabPanel>
 
-            <CustomTabPanel value={value} index={1} className="center">
-                <BalanceTable tricountId={Number(id)} users={users}/>
-            </CustomTabPanel>
+                <CustomTabPanel value={value} index={1} className="center">
+                    <BalanceTable tricountId={Number(id)} users={users}/>
+                </CustomTabPanel>
 
 
-            <div style={{display: 'flex', justifyContent: 'space-between', margin: '10px'}}>
-                <Button variant="outlined" color="error" onClick={() => navigate("/")}>
-                    Zurück
-                </Button>
-                {value === 1 && (
-                    <Button variant="outlined" color="secondary"
-                            onClick={() => navigate(`/feicount/${id}/transactions`, {state: {users}})}>
-                        Zur Abrechnung
+                <div style={{display: 'flex', justifyContent: 'space-between', margin: '10px'}}>
+                    <Button variant="outlined" color="error" onClick={() => navigate("/")}>
+                        Zurück
                     </Button>
-                )}
-            </div>
-        </Box>
+                    {value === 1 && (
+                        <Button variant="outlined" color="secondary"
+                                onClick={() => navigate(`/feicount/${id}/transactions`, {state: {users}})}>
+                            Zur Abrechnung
+                        </Button>
+                    )}
+                </div>
+            </Box>
+        </div>
     );
 };

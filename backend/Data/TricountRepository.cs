@@ -14,6 +14,7 @@ public interface IFeicountRepository
     public List<User> GetUsers(int id);
     public void DeleteFeicountUser(Feicount feicount, User user);
     public Feicount? GetFeicountForExpense(int expenseId);
+    public void UpdateFeicount(Feicount feicount);
 }
 
 public class FeicountRepository : IFeicountRepository
@@ -24,7 +25,7 @@ public class FeicountRepository : IFeicountRepository
     {
         _ctx = context;
     }
-    
+
     public List<Feicount> FindAll()
     {
         return _ctx.Feicounts
@@ -38,7 +39,7 @@ public class FeicountRepository : IFeicountRepository
         return _ctx.Feicounts
             .Include(t => t.Users)
             .Include(t => t.Expenses)
-                .ThenInclude(e => e.Recipients)
+            .ThenInclude(e => e.Recipients)
             .FirstOrDefault(t => t.Id == id);
     }
 
@@ -61,7 +62,7 @@ public class FeicountRepository : IFeicountRepository
         feicount.Expenses.Add(expense);
         _ctx.SaveChanges();
     }
-    
+
     public void AddUserToFeicount(Feicount feicount, User user)
     {
         feicount.Users.Add(user);
@@ -83,5 +84,11 @@ public class FeicountRepository : IFeicountRepository
     public Feicount? GetFeicountForExpense(int expenseId)
     {
         return _ctx.Feicounts.FirstOrDefault(t => t.Id == expenseId);
+    }
+
+    public void UpdateFeicount(Feicount feicount)
+    {
+        _ctx.Feicounts.Update(feicount);
+        _ctx.SaveChanges();
     }
 }
