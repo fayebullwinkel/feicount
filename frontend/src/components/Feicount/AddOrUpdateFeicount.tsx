@@ -12,7 +12,7 @@ import CategorySelector from "./CategorySelector";
 import FeicountUserInput from "./FeicountUserInput";
 import FormActions from "../FormActions";
 
-export default function NewFeicount({id}: { id?: string }) {
+export default function AddOrUpdateFeicount({id}: { id?: string }) {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [currency, setCurrency] = useState(Currency[Currency.EUR]);

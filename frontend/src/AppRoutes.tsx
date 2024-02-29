@@ -2,7 +2,7 @@ import React from 'react';
 import {ReactElement} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
 import Home from './components/Home';
-import NewFeicount from './components/Feicount/NewFeicount';
+import NewFeicount from './components/Feicount/AddOrUpdateFeicount';
 import NewExpense from './components/Expense/NewExpense';
 import Feicount from './components/Feicount/Feicount';
 import TransactionOverview from './components/Transaction/TransactionOverview';
