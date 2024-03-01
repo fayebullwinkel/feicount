@@ -34,7 +34,8 @@ interface Spender {
 export interface User {
     id: number,
     userName: string;
-    expenseIds: number[]
+    expenseIds?: number[];
+    feicountIds?: number[]
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -95,8 +96,26 @@ export default function Feicount({id}: FeicountProps) {
     const [expenses, setExpenses] = useState<Expense[]>([]);
     const [spender, setSpender] = useState<Spender[]>([]);
     const [users, setUsers] = useState<User[]>([]);
+    const [feicountTitle, setFeicountTitle] = useState<string>("");
     const navigate = useNavigate();
 
+    useEffect(() => {
+        const fetchFeicount = async () => {
+            const feicountResponse = await fetch(`/api/Feicount/${id}`);
+
+            if (!feicountResponse.ok) {
+                throw new Error(`Failed to fetch feicount with id ${id}`);
+            }
+
+            const feicountData = await feicountResponse.json();
+            setFeicountTitle(feicountData.title);
+        };
+
+        if (id) {
+            fetchFeicount();
+        }
+    }, [id]);
+    
     useEffect(() => {
         try {
             setUsers([]);
@@ -138,15 +157,12 @@ export default function Feicount({id}: FeicountProps) {
         navigate(`/feicount/${id}/expenses/new`);
     }
 
-    function updateFeicount() {
-        navigate(`/feicount/${id}/udpate`)
-    }
 
     return (
         <div>
-            {value === 0 && (
-                <div style={{textAlign: "right", color: "grey"}} onClick={updateFeicount}>Bearbeiten</div>
-            )}
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+                <h2>{feicountTitle}</h2>
+            </div>
             <Box sx={{width: '100%'}}>
                 <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                     <Tabs
@@ -191,6 +207,12 @@ export default function Feicount({id}: FeicountProps) {
                     <Button variant="outlined" color="error" onClick={() => navigate("/")}>
                         Zurück
                     </Button>
+                    {value === 0 && (
+                        <Button variant="outlined" color="info"
+                                onClick={() => navigate(`/feicount/${id}/udpate`, {state: {users}})}>
+                            Bearbeiten
+                        </Button>
+                    )}
                     {value === 1 && (
                         <Button variant="outlined" color="secondary"
                                 onClick={() => navigate(`/feicount/${id}/transactions`, {state: {users}})}>

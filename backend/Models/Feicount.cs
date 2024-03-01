@@ -15,10 +15,11 @@ public class Feicount
         var totalSpent = Expenses.Where(e => e.Spender.Id == user.Id).Sum(e => e.Amount);
         var totalReceived = Expenses
             .Where(e => e.Recipients.Contains(user))
-            .Sum(e => e.Amount / e.Recipients.Count);
+            .Sum(e => e.Amount /
+                      e.Recipients.Count); // TODO: hier wird abgerundet -> es darf nicht für jeden abgerundet werden
         return new UserBalance(userId: user.Id, amount: totalSpent - totalReceived);
     }
-    
+
     public List<Transaction> CalculateTransactions()
     {
         List<Transaction> transactions = new List<Transaction>();
@@ -54,6 +55,7 @@ public class Feicount
                 debtor.Amount -= transferAmount;
             }
         }
+
         return transactions.Where(t => t.CreditorId != 0 && t.DebtorId != 0).ToList();
     }
 }
