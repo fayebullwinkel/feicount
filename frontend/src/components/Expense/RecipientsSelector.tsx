@@ -46,6 +46,7 @@ const RecipientsSelector = ({ users, setUsers, currency, amount }: RecipientsSel
 
         const share = amount / 100 / totalCheckedUsers;
         const newShares: Record<number, number> = {};
+
         checkedUsers.forEach((user) => {
             newShares[user.id] = share;
         });
