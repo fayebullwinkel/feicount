@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import {TextField, Button, MenuItem, Box, List, ListItem, ListItemText} from "@mui/material";
 import {Currency, mapToCurrency} from "../../types/Currency";
 import {Category, mapToCategory} from "../../types/Category";
 import {FeicountData} from "../Home";
@@ -62,7 +61,6 @@ export default function AddOrUpdateFeicount({id}: { id?: string }) {
             setDescription(feicount.description || "");
             setCurrency(Currency[feicount.currency] || Currency[Currency.EUR]);
             setCategory(Category[feicount.category] || Category[Category.Reise]);
-            console.log(feicount.userNames);
         }
     }, [feicount]);
 
@@ -75,8 +73,9 @@ export default function AddOrUpdateFeicount({id}: { id?: string }) {
             setTitleError(true);
         }
 
+        console.log(userNames);
         const postData: FeicountData = {
-            id: 0,
+            id: id ? Number(id) : 0,
             title,
             description,
             currency: mapToCurrency(currency),
@@ -87,21 +86,37 @@ export default function AddOrUpdateFeicount({id}: { id?: string }) {
         };
 
         try {
-            const postResponse = await fetch('/api/Feicount', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(postData),
-            });
+            if (id) {
+                const putFeicountResponse = await fetch(`api/Feicount/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postData),
+                });
 
-            if (!postResponse.ok) {
-                throw new Error('Failed to post data');
+                if (!putFeicountResponse.ok) {
+                    throw new Error('Failed to update data');
+                }
+
+                navigate(`/feicount/${id}`);
+            } else {
+                const postResponse = await fetch('/api/Feicount', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(postData),
+                });
+
+                if (!postResponse.ok) {
+                    throw new Error('Failed to post data');
+                }
+
+                navigate('/');
             }
-
-            navigate('/');
         } catch (err: any) {
-            console.log(err.message)
+            console.log(err.message);
         }
     }
 
@@ -115,7 +130,7 @@ export default function AddOrUpdateFeicount({id}: { id?: string }) {
                 <DescriptionInput description={description} setDescription={setDescription}/>
                 <CurrencySelector currency={currency} setCurrency={setCurrency}/>
                 <CategorySelector category={category} setCategory={setCategory}/>
-                <FeicountUserInput userNames={userNames} setUserNames={setUserNames}/>
+                {id ? null : <FeicountUserInput userNames={userNames} setUserNames={setUserNames} />}
                 <FormActions prevPage={'/'} navigate={navigate}/>
             </form>
         </React.Fragment>
