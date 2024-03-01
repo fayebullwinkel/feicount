@@ -131,7 +131,7 @@ export default function AddOrUpdateFeicount({id}: { id?: string }) {
                 <CurrencySelector currency={currency} setCurrency={setCurrency}/>
                 <CategorySelector category={category} setCategory={setCategory}/>
                 {id ? null : <FeicountUserInput userNames={userNames} setUserNames={setUserNames} />}
-                <FormActions prevPage={'/'} navigate={navigate}/>
+                <FormActions prevPage={id ? `/feicount/${id}` : '/'} navigate={navigate}/>
             </form>
         </React.Fragment>
     );

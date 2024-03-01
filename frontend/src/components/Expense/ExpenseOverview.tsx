@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import {Card, CardContent, Grid, Typography } from "@mui/material";
 import React from "react";
 
 interface OverviewProps {
@@ -13,21 +13,23 @@ interface OverviewProps {
 }
 export default function Overview({ expense, spender }: OverviewProps) {
     return (
-        <>
-            <Grid container margin='10px' spacing={2}>
-                <Grid item xs={8}>
-                    <div>{expense.title}</div>
-                    <div>
-                        Bezahlt von <b>{spender.userName}</b>
-                    </div>
+        <Card style={{margin:"10px"}}>
+            <CardContent>
+                <Grid container spacing={2}>
+                    <Grid item xs={8}>
+                        <Typography variant="h6">{expense.title}</Typography>
+                        <Typography>
+                            Bezahlt von <b>{spender.userName}</b>
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={4}>
+                        <Typography>
+                            {(expense.amount / 100).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
+                        </Typography>
+                        <Typography>{new Date(expense.date).toLocaleDateString('de-DE')}</Typography>
+                    </Grid>
                 </Grid>
-                <Grid item xs={4}>
-                    <div>
-                        {(expense.amount / 100).toLocaleString('de-DE', { style: 'currency', currency: 'EUR' })}
-                    </div>
-                    <div>{new Date(expense.date).toLocaleDateString('de-DE')}</div>
-                </Grid>
-            </Grid>
-        </>
+            </CardContent>
+        </Card>
     );
-};
+}

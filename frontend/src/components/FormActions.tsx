@@ -17,7 +17,7 @@ export default function FormActions({ prevPage, navigate }: FormActionsProps) {
                 Abbrechen
             </Button>
             <Button variant="outlined" color="secondary" type="submit">
-                Sichern
+                Speichern
             </Button>
         </div>
     );

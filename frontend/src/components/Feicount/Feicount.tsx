@@ -210,7 +210,7 @@ export default function Feicount({id}: FeicountProps) {
                     {value === 0 && (
                         <Button variant="outlined" color="info"
                                 onClick={() => navigate(`/feicount/${id}/udpate`, {state: {users}})}>
-                            Bearbeiten
+                            Feicount Bearbeiten
                         </Button>
                     )}
                     {value === 1 && (
