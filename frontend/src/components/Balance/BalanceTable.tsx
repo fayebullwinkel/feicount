@@ -84,7 +84,7 @@ export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
                                     <div
                                         style={{
                                             backgroundColor: userBalance.amount <= 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '',
-                                            width: index % 2 !== 0 ? `${Math.abs(userBalance.amount) / maxBalance}%` : 'auto',
+                                            width: userBalance.amount <= 0 ? `${Math.abs(userBalance.amount) / maxBalance}%` : 'auto',
                                             height: '100%',
                                             padding: '16px',
                                             display: 'flex',
@@ -100,7 +100,7 @@ export default function BalanceTable({ tricountId, users }: BalanceTableProps) {
                                     <div
                                         style={{
                                             backgroundColor: userBalance.amount > 0 ? getUserBalanceColor(userBalance.userId, userBalances) : '',
-                                            width: index % 2 === 0 ? `${Math.abs(userBalance.amount) / maxBalance}%` : 'auto',
+                                            width: userBalance.amount > 0 ? `${Math.abs(userBalance.amount) / maxBalance}%` : 'auto',
                                             height: '100%',
                                             padding: '16px',
                                             borderRadius: '0 5px 5px 0'
