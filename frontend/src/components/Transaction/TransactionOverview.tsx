@@ -3,7 +3,11 @@ import {
     Button,
     Card,
     CardContent,
-    Typography
+    Typography,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogTitle
 } from '@mui/material';
 import {User} from '../Feicount/Feicount';
 import {NavigateFunction, useNavigate} from 'react-router-dom';
@@ -14,14 +18,16 @@ interface OverviewProps {
 }
 
 interface Transaction {
-    id: number,
-    debtorId: number,
-    creditorId: number,
-    amount: number
+    id: number;
+    debtorId: number;
+    creditorId: number;
+    amount: number;
 }
 
 export default function TransactionOverview({feicountId, users}: OverviewProps) {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
+    const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+    const [openDialog, setOpenDialog] = useState(false);
     const navigate: NavigateFunction = useNavigate();
 
     useEffect(() => {
@@ -46,6 +52,28 @@ export default function TransactionOverview({feicountId, users}: OverviewProps) 
         }
     }, [feicountId, users]);
 
+    const handleOpenDialog = (transaction: Transaction) => {
+        setSelectedTransaction(transaction);
+        setOpenDialog(true);
+    };
+
+    const handleCloseDialog = () => {
+        setSelectedTransaction(null);
+        setOpenDialog(false);
+    };
+
+    const handleConfirmPayment = async () => {
+        if (selectedTransaction) {
+            try {
+                // Call your payTransaction function or any other logic here
+                await payTransaction(selectedTransaction);
+                setOpenDialog(false);
+            } catch (error) {
+                console.error('Error confirming payment:', error);
+            }
+        }
+    };
+
     const payTransaction = async (transaction: Transaction) => {
         const postResponse = await fetch(`api/Feicount/${feicountId}/Transactions/${transaction.id}/Pay`, {
             method: 'POST',
@@ -60,7 +88,7 @@ export default function TransactionOverview({feicountId, users}: OverviewProps) 
         }
 
         navigate(`/feicount/${feicountId}`);
-    }
+    };
 
     return (
         <div>
@@ -98,7 +126,7 @@ export default function TransactionOverview({feicountId, users}: OverviewProps) 
                             <Button
                                 variant="outlined"
                                 color="info"
-                                onClick={() => payTransaction(transaction)}
+                                onClick={() => handleOpenDialog(transaction)}
                                 style={{position: 'absolute', bottom: '10px', right: '10px'}}
                             >
                                 Bezahlen
@@ -107,6 +135,29 @@ export default function TransactionOverview({feicountId, users}: OverviewProps) 
                     </Card>
                 );
             })}
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Bezahlung bestätigen</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        {`Wurden die ${((selectedTransaction?.amount || 0) / 100).toLocaleString('de-DE', {
+                            style: 'currency',
+                            currency: 'EUR'
+                        })} von ${
+                            users.find((user) => user.id === selectedTransaction?.debtorId)?.userName
+                        } an ${
+                            users.find((user) => user.id === selectedTransaction?.creditorId)?.userName
+                        } zurückgezahlt?`}
+                    </Typography>
+                </DialogContent>
+                <DialogActions style={{ justifyContent: 'space-between', padding: '16px' }}>
+                    <Button onClick={handleCloseDialog} color="error">
+                        Abbrechen
+                    </Button>
+                    <Button onClick={handleConfirmPayment} color="info">
+                        Bestätigen
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <div style={{display: 'flex', justifyContent: 'space-between', margin: '10px'}}>
                 <Button variant="outlined" color="error" onClick={() => navigate(`/feicount/${feicountId}`)}>
                     Zurück
@@ -114,4 +165,4 @@ export default function TransactionOverview({feicountId, users}: OverviewProps) 
             </div>
         </div>
     );
-};
+}
