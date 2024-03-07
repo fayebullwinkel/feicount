@@ -25,7 +25,9 @@ To begin exploring this project, follow these steps:
 1. Clone this repository to your local machine:
    ```bash
    git clone https://gitlab.rz.htw-berlin.de/s0581885/ic_02.git
-2. Open the project in the editor of your choice, capable of displaying react projects with a backend written in C#
-3. Run docker-compose up -d
+2. open the project
+3. run docker-compose up -d
+4. cd backend
+5. dotnet run --launch-profile feicount
 
 
