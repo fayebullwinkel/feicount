@@ -9,7 +9,6 @@ public interface IFeicountMapper
     public FeicountDto ToFeicountDto(Feicount model);
     public Expense ToExpense(ExpenseDto dto, User spender, List<User> recipients, Feicount feicount);
     public ExpenseDto ToExpenseDto(Expense model);
-    public UserDto ToUserDto(User model);
 }
 
 public class FeicountMapper: IFeicountMapper
@@ -66,17 +65,6 @@ public class FeicountMapper: IFeicountMapper
             Date = model.Date,
             SpenderUserId = model.Spender.Id,
             RecipientIds = model.Recipients.Select(r => r.Id).ToList()
-        };
-    }
-
-    public UserDto ToUserDto(User model)
-    {
-        return new UserDto
-        {
-            Id = model.Id,
-            UserName = model.UserName,
-            FeicountIds = model.Feicounts.Select(t => t.Id).ToList(),
-            ExpenseIds = model.Expenses.Select(e => e.Id).ToList()
         };
     }
 }

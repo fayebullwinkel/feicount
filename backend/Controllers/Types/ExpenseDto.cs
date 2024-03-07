@@ -9,4 +9,5 @@ public class ExpenseDto
     public DateTime Date { get; set; }
     public int SpenderUserId { get; set; }
     public List<int> RecipientIds { get; set; }
+    public int? FeicountId { get; set; }
 }

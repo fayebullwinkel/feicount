@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using feicount.Controllers.Mappers;
 using feicount.Controllers.Types;
-using feicount.Models;
 using feicount.Services;
 
 namespace feicount.Controllers;

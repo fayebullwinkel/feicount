@@ -11,11 +11,13 @@ namespace feicount.Controllers;
 public class FeicountController : ControllerBase
 {
     private readonly IFeicountMapper _feicountMapper;
+    private readonly IUserMapper _userMapper;
     private readonly IFeicountService _feicountService;
 
-    public FeicountController(IFeicountMapper feicountMapper, IFeicountService feicountService)
+    public FeicountController(IFeicountMapper feicountMapper, IUserMapper userMapper, IFeicountService feicountService)
     {
         _feicountMapper = feicountMapper;
+        _userMapper = userMapper;
         _feicountService = feicountService;
     }
 
@@ -47,7 +49,7 @@ public class FeicountController : ControllerBase
     [HttpGet("{id}/Users")]
     public List<UserDto> GetUsers(int id)
     {
-        return _feicountService.GetFeicountUsers(id).Select(user => _feicountMapper.ToUserDto(user)).ToList();
+        return _feicountService.GetFeicountUsers(id).Select(user => _userMapper.ToUserDto(user)).ToList();
     }
 
     [HttpPost("{id}/Users/{userId}")]
