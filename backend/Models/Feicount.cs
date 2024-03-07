@@ -16,7 +16,7 @@ public class Feicount
         var totalReceived = Expenses
             .Where(e => e.Recipients.Contains(user))
             .Sum(e => e.Amount /
-                      e.Recipients.Count); // TODO: hier wird abgerundet -> es darf nicht für jeden abgerundet werden
+                      e.Recipients.Count);
         return new UserBalance(userId: user.Id, amount: totalSpent - totalReceived);
     }
 
