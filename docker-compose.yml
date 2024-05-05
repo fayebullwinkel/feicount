@@ -10,3 +10,11 @@ services:
       POSTGRES_PASSWORD: tricount
     ports:
       - "5432:5432"
+  
+  #feicount:
+  #  image: feicount:latest
+  #  container_name: tricount-feicount
+  #  environment:
+  #    "ConnectionStrings:DefaultConnection": "Host=postgres;Port=5432;Database=feicount;Username=tricount;Password=tricount;"
+  #  ports:
+  #    - "8080:8080"
