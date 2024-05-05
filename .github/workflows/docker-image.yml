@@ -29,8 +29,8 @@ jobs:
         username: ${{ github.actor }}
         password: ${{ github.token }}
 
-    - name: Build Docker image
-      run: docker build -t ghcr.io/fayebullwinkel/feicount:latest .
-
-    - name: Push Docker image to GHCR.io
-      run: docker push ghcr.io/fayebullwinkel/feicount:latest
+    - name: Build and push
+      uses: docker/build-push-action@v3
+      with:
+        push: true
+        tags: ghcr.io/fayebullwinkel/feicount:latest
